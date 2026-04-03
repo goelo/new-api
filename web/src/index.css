@@ -1006,3 +1006,301 @@ html.dark .with-pastel-balls::before {
 }
 
 .ec-dbcd0a3c01b55203 { forced-color-adjust: auto; }
+
+/* ==================== FlashAPI Homepage Styles ==================== */
+
+/* CSS Variables - Dark Mode (Default) */
+:root {
+  --flash-cyan: #06b6d4;
+  --flash-cyan-light: #22d3ee;
+  --flash-blue: #3b82f6;
+  --flash-bg-deep: #030712;
+  --flash-bg-card: #0a0f1a;
+  --flash-border: #1e293b;
+  --flash-text-primary: #e2e8f0;
+  --flash-text-muted: #64748b;
+  --flash-text-dim: #475569;
+  --flash-glow: rgba(6, 182, 212, 0.15);
+}
+
+/* CSS Variables - Light Mode Override */
+body:not([theme-mode="dark"]) {
+  --flash-cyan: #0891b2;
+  --flash-cyan-light: #06b6d4;
+  --flash-blue: #2563eb;
+  --flash-bg-deep: #fafaf9;
+  --flash-bg-card: #ffffff;
+  --flash-border: #e2e8f0;
+  --flash-text-primary: #0f172a;
+  --flash-text-muted: #64748b;
+  --flash-text-dim: #94a3b8;
+  --flash-glow: rgba(6, 182, 212, 0.08);
+}
+
+/* Font Scoping */
+.flash-home,
+.flash-header,
+.flash-footer {
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+}
+
+.flash-home code,
+.flash-home .mono {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* Background Effects */
+.flash-home {
+  position: relative;
+  background: var(--flash-bg-deep);
+  min-height: calc(100vh - 64px);
+}
+
+.flash-bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body:not([theme-mode="dark"]) .flash-bg-grid {
+  background-image:
+    linear-gradient(rgba(6,182,212,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6,182,212,0.02) 1px, transparent 1px);
+}
+
+.flash-bg-glow {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse, rgba(6,182,212,0.08) 0%, rgba(59,130,246,0.04) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body:not([theme-mode="dark"]) .flash-bg-glow {
+  background: radial-gradient(ellipse, rgba(6,182,212,0.04) 0%, rgba(59,130,246,0.02) 40%, transparent 70%);
+}
+
+/* Bento Grid Layout */
+.flash-bento {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px 60px;
+}
+
+.flash-card {
+  background: var(--flash-bg-card);
+  border: 1px solid var(--flash-border);
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.flash-card.span-2 {
+  grid-column: span 2;
+}
+
+.flash-card.span-3 {
+  grid-column: span 3;
+}
+
+.flash-card:hover {
+  border-color: rgba(6,182,212,0.4);
+  box-shadow: 0 0 30px rgba(6,182,212,0.08);
+  transform: translateY(-2px);
+}
+
+.flash-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--flash-cyan), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.flash-card:hover::before {
+  opacity: 0.5;
+}
+
+/* Animations */
+@keyframes flash-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.flash-card:nth-child(1) {
+  animation: flash-card-in 0.6s 0.1s ease-out forwards;
+}
+
+.flash-card:nth-child(2) {
+  animation: flash-card-in 0.6s 0.2s ease-out forwards;
+}
+
+.flash-card:nth-child(3) {
+  animation: flash-card-in 0.6s 0.3s ease-out forwards;
+}
+
+.flash-card:nth-child(4) {
+  animation: flash-card-in 0.6s 0.4s ease-out forwards;
+}
+
+.flash-card:nth-child(5) {
+  animation: flash-card-in 0.6s 0.5s ease-out forwards;
+}
+
+.flash-card:nth-child(6) {
+  animation: flash-card-in 0.6s 0.6s ease-out forwards;
+}
+
+@keyframes flash-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes flash-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes flash-speed-pulse {
+  0%, 100% {
+    width: 12%;
+    opacity: 0.8;
+  }
+  50% {
+    width: 18%;
+    opacity: 1;
+  }
+}
+
+/* Logo Icon Styles */
+.flash-logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--flash-cyan), var(--flash-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(6,182,212,0.3);
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.flash-logo-icon svg {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.flash-logo-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+  animation: sweep-shine 3s ease-in-out infinite;
+}
+
+/* Header Styles */
+.flash-header {
+  background: rgba(3,7,18,0.8) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--flash-border);
+}
+
+.flash-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--flash-cyan), transparent);
+  opacity: 0.3;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .flash-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .flash-card:hover {
+    transform: none;
+  }
+
+  .flash-pulse,
+  .flash-blink,
+  .flash-speed-bar-fill,
+  .flash-logo-icon::after {
+    animation: none !important;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 767px) {
+  .flash-bento {
+    grid-template-columns: 1fr;
+    padding: 0 16px 40px;
+  }
+
+  .flash-card {
+    padding: 16px;
+  }
+
+  .flash-card.span-2,
+  .flash-card.span-3 {
+    grid-column: span 1;
+  }
+}
+
+/* Responsive - Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .flash-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flash-card.span-3 {
+    grid-column: span 2;
+  }
+}
+

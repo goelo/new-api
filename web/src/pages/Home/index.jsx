@@ -38,7 +38,7 @@ import {
   IconFile,
   IconCopy,
 } from '@douyinfe/semi-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import NoticeModal from '../../components/layout/NoticeModal';
 import {
   Moonshot,
@@ -69,6 +69,7 @@ const Home = () => {
   const { t, i18n } = useTranslation();
   const [statusState] = useContext(StatusContext);
   const actualTheme = useActualTheme();
+  const navigate = useNavigate();
   const [homePageContentLoaded, setHomePageContentLoaded] = useState(false);
   const [homePageContent, setHomePageContent] = useState('');
   const [noticeVisible, setNoticeVisible] = useState(false);
@@ -80,6 +81,7 @@ const Home = () => {
   const endpointItems = API_ENDPOINTS.map((e) => ({ value: e }));
   const [endpointIndex, setEndpointIndex] = useState(0);
   const isChinese = i18n.language.startsWith('zh');
+  const [copiedEndpoint, setCopiedEndpoint] = useState(false);
 
   const displayHomePageContent = async () => {
     setHomePageContent(localStorage.getItem('home_page_content') || '');
@@ -114,6 +116,14 @@ const Home = () => {
     const ok = await copy(serverAddress);
     if (ok) {
       showSuccess(t('已复制到剪切板'));
+    }
+  };
+
+  const handleCopyEndpoint = async () => {
+    const ok = await copy(serverAddress);
+    if (ok) {
+      setCopiedEndpoint(true);
+      setTimeout(() => setCopiedEndpoint(false), 2000);
     }
   };
 
@@ -156,183 +166,135 @@ const Home = () => {
         isMobile={isMobile}
       />
       {homePageContentLoaded && homePageContent === '' ? (
-        <div className='w-full overflow-x-hidden'>
-          {/* Banner 部分 */}
-          <div className='w-full border-b border-semi-color-border min-h-[500px] md:min-h-[600px] lg:min-h-[700px] relative overflow-x-hidden'>
-            {/* 背景模糊晕染球 */}
-            <div className='blur-ball blur-ball-indigo' />
-            <div className='blur-ball blur-ball-teal' />
-            <div className='flex items-center justify-center h-full px-4 py-20 md:py-24 lg:py-32 mt-10'>
-              {/* 居中内容区 */}
-              <div className='flex flex-col items-center justify-center text-center max-w-4xl mx-auto'>
-                <div className='flex flex-col items-center justify-center mb-6 md:mb-8'>
-                  <h1
-                    className={`text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-semi-color-text-0 leading-tight ${isChinese ? 'tracking-wide md:tracking-wider' : ''}`}
-                  >
-                    <>
-                      {t('统一的')}
-                      <br />
-                      <span className='shine-text'>{t('大模型接口网关')}</span>
-                    </>
-                  </h1>
-                  <p className='text-base md:text-lg lg:text-xl text-semi-color-text-1 mt-4 md:mt-6 max-w-xl'>
-                    {t('更好的价格，更好的稳定性，只需要将模型基址替换为：')}
-                  </p>
-                  {/* BASE URL 与端点选择 */}
-                  <div className='flex flex-col md:flex-row items-center justify-center gap-4 w-full mt-4 md:mt-6 max-w-md'>
-                    <Input
-                      readonly
-                      value={serverAddress}
-                      className='flex-1 !rounded-full'
-                      size={isMobile ? 'default' : 'large'}
-                      suffix={
-                        <div className='flex items-center gap-2'>
-                          <ScrollList
-                            bodyHeight={32}
-                            style={{ border: 'unset', boxShadow: 'unset' }}
-                          >
-                            <ScrollItem
-                              mode='wheel'
-                              cycled={true}
-                              list={endpointItems}
-                              selectedIndex={endpointIndex}
-                              onSelect={({ index }) => setEndpointIndex(index)}
-                            />
-                          </ScrollList>
-                          <Button
-                            type='primary'
-                            onClick={handleCopyBaseURL}
-                            icon={<IconCopy />}
-                            className='!rounded-full'
-                          />
-                        </div>
-                      }
-                    />
-                  </div>
-                </div>
+        <div className='flash-home'>
+          <div className='flash-bg-grid'></div>
+          <div className='flash-bg-glow'></div>
 
-                {/* 操作按钮 */}
-                <div className='flex flex-row gap-4 justify-center items-center'>
-                  <Link to='/console'>
-                    <Button
-                      theme='solid'
-                      type='primary'
-                      size={isMobile ? 'default' : 'large'}
-                      className='!rounded-3xl px-8 py-2'
-                      icon={<IconPlay />}
-                    >
-                      {t('获取密钥')}
-                    </Button>
-                  </Link>
-                  {isDemoSiteMode && statusState?.status?.version ? (
-                    <Button
-                      size={isMobile ? 'default' : 'large'}
-                      className='flex items-center !rounded-3xl px-6 py-2'
-                      icon={<IconGithubLogo />}
-                      onClick={() =>
-                        window.open(
-                          'https://github.com/QuantumNous/new-api',
-                          '_blank',
-                        )
-                      }
-                    >
-                      {statusState.status.version}
-                    </Button>
-                  ) : (
-                    docsLink && (
-                      <Button
-                        size={isMobile ? 'default' : 'large'}
-                        className='flex items-center !rounded-3xl px-6 py-2'
-                        icon={<IconFile />}
-                        onClick={() => window.open(docsLink, '_blank')}
-                      >
-                        {t('文档')}
-                      </Button>
-                    )
-                  )}
-                </div>
+          {/* Hero Section */}
+          <section style={{ textAlign: 'center', padding: '100px 32px 48px', position: 'relative', zIndex: 1 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '100px', border: '1px solid var(--flash-border)', background: 'rgba(6,182,212,0.05)', fontSize: '12px', color: 'var(--flash-cyan-light)', fontWeight: 500, marginBottom: '24px' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--flash-cyan)', boxShadow: '0 0 8px var(--flash-cyan)', animation: 'flash-pulse 2s ease-in-out infinite' }}></span>
+              {t('统一 AI 网关 — 支持 40+ 供应商')}
+            </div>
+            <h1 style={{ fontSize: isMobile ? '36px' : '52px', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: '16px', background: 'linear-gradient(135deg, #fff 0%, var(--flash-cyan-light) 50%, var(--flash-blue) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              {t('一个 API')}<br/>{t('所有模型')}
+            </h1>
+            <p style={{ fontSize: isMobile ? '15px' : '18px', color: 'var(--flash-text-muted)', maxWidth: '520px', margin: '0 auto 32px', lineHeight: 1.6 }}>
+              {t('通过一个闪电般快速的端点，访问 OpenAI、Claude、Gemini、DeepSeek 等 40+ AI 供应商。兼容 OpenAI 接口，零迁移成本。')}
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Button theme='solid' type='primary' size={isMobile ? 'default' : 'large'} onClick={() => navigate('/console')} style={{ borderRadius: '8px', padding: '12px 28px', fontSize: '15px' }}>
+                {t('获取密钥')} →
+              </Button>
+              <Button size={isMobile ? 'default' : 'large'} onClick={() => window.open(docsLink || '/docs')} style={{ borderRadius: '8px', padding: '12px 28px', fontSize: '15px' }}>
+                {t('查看文档')}
+              </Button>
+            </div>
+          </section>
 
-                {/* 框架兼容性图标 */}
-                <div className='mt-12 md:mt-16 lg:mt-20 w-full'>
-                  <div className='flex items-center mb-6 md:mb-8 justify-center'>
-                    <Text
-                      type='tertiary'
-                      className='text-lg md:text-xl lg:text-2xl font-light'
-                    >
-                      {t('支持众多的大模型供应商')}
-                    </Text>
-                  </div>
-                  <div className='flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto px-4'>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Moonshot size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <OpenAI size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <XAI size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Zhipu.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Volcengine.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Cohere.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Claude.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Gemini.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Suno size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Minimax.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Wenxin.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Spark.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Qingyan.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <DeepSeek.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Qwen.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Midjourney size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Grok size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <AzureAI.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Hunyuan.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Xinference.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Typography.Text className='!text-lg sm:!text-xl md:!text-2xl lg:!text-3xl font-bold'>
-                        30+
-                      </Typography.Text>
-                    </div>
-                  </div>
+          {/* Bento Grid - Part 1 */}
+          <section className='flash-bento'>
+            {/* Card 1: Terminal (span 2) */}
+            <div className='flash-card span-2'>
+              <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('实时演示')}</div>
+              <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('即刻体验')}</div>
+              <div style={{ background: '#020617', border: '1px solid var(--flash-border)', borderRadius: '10px', marginTop: '16px', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 14px', borderBottom: '1px solid var(--flash-border)' }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }}></div>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#eab308' }}></div>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e' }}></div>
+                </div>
+                <div className='mono' style={{ padding: '14px', fontSize: isMobile ? '11px' : '12px', lineHeight: 1.8, color: 'var(--flash-text-dim)', overflowX: 'auto' }}>
+                  <div><span style={{ color: 'var(--flash-cyan)' }}>$</span> <span style={{ color: 'var(--flash-text-dim)' }}>curl -X POST</span> <span style={{ color: 'var(--flash-blue)' }}>{serverAddress}/v1/chat/completions</span> \</div>
+                  <div>&nbsp;&nbsp;<span style={{ color: 'var(--flash-text-dim)' }}>-H</span> <span style={{ color: 'var(--flash-cyan-light)' }}>"Authorization: Bearer sk-..."</span> \</div>
+                  <div>&nbsp;&nbsp;<span style={{ color: 'var(--flash-text-dim)' }}>-d</span> <span style={{ color: 'var(--flash-blue)' }}>'{`{"model": "gpt-4o", "messages": [...]}`}'</span></div>
+                  <div style={{ marginTop: '8px' }}><span style={{ color: '#22c55e' }}>✓ 200 OK</span> <span style={{ color: 'var(--flash-text-dim)' }}>· 47ms · streamed 1,204 tokens</span></div>
+                  <span style={{ display: 'inline-block', width: '8px', height: '16px', background: 'var(--flash-cyan)', animation: 'flash-blink 1s step-end infinite', verticalAlign: 'text-bottom', marginLeft: '2px' }}></span>
                 </div>
               </div>
             </div>
-          </div>
+
+            {/* Card 2: Speed */}
+            <div className='flash-card'>
+              <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('性能')}</div>
+              <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('闪电般快速')}</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '16px' }}>
+                <span className='mono' style={{ fontSize: '56px', fontWeight: 800, color: 'var(--flash-cyan-light)', lineHeight: 1, textShadow: '0 0 40px rgba(6,182,212,0.3)' }}>&lt;50</span>
+                <span style={{ fontSize: '20px', color: 'var(--flash-text-dim)', fontWeight: 500 }}>ms</span>
+              </div>
+              <div style={{ fontSize: '14px', color: 'var(--flash-text-muted)', lineHeight: 1.5 }}>{t('附加网关延迟')}</div>
+              <div style={{ marginTop: '16px', height: '4px', borderRadius: '2px', background: 'var(--flash-border)', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: '15%', borderRadius: '2px', background: 'linear-gradient(90deg, var(--flash-cyan), var(--flash-blue))', boxShadow: '0 0 10px rgba(6,182,212,0.5)', animation: 'flash-speed-pulse 2s ease-in-out infinite' }} className='flash-speed-bar-fill'></div>
+              </div>
+            </div>
+
+            {/* Card 3: Compatibility */}
+            <div className='flash-card'>
+              <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('兼容性')}</div>
+              <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('一行代码切换')}</div>
+              <div style={{ fontSize: '14px', color: 'var(--flash-text-muted)', lineHeight: 1.5, marginBottom: '8px' }}>{t('OpenAI 直接替换。更改 base URL，其他代码不变。')}</div>
+              <div className='mono' style={{ marginTop: '16px', fontSize: '13px', lineHeight: 1.8 }}>
+                <div style={{ color: 'var(--flash-text-dim)' }}>base_url =</div>
+                <div style={{ color: '#ef4444', textDecoration: 'line-through', opacity: 0.5 }}>&nbsp;"api.openai.com"</div>
+                <div style={{ color: '#22c55e' }}>&nbsp;"{serverAddress.replace('https://', '').replace('http://', '')}"</div>
+              </div>
+            </div>
+
+            {/* Card 4: Endpoint */}
+            <div className='flash-card'>
+              <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('接入点')}</div>
+              <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('你的 API 地址')}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', padding: '12px 16px', background: '#020617', border: '1px solid var(--flash-border)', borderRadius: '10px', fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', color: 'var(--flash-cyan-light)', transition: 'all 0.3s', cursor: 'pointer' }} onClick={handleCopyEndpoint}>
+                <span style={{ color: 'var(--flash-text-dim)' }}>https://</span>
+                {serverAddress.replace('https://', '').replace('http://', '')}
+                <span style={{ marginLeft: 'auto', padding: '4px 10px', borderRadius: '6px', background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.2)', color: 'var(--flash-cyan)', fontSize: '11px', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>
+                  {copiedEndpoint ? t('已复制') : 'COPY'}
+                </span>
+              </div>
+              <div style={{ fontSize: '14px', color: 'var(--flash-text-muted)', lineHeight: 1.5, marginTop: '10px' }}>{t('兼容 OpenAI 的接入点，适用于任何 SDK。')}</div>
+            </div>
+
+            {/* Card 5: Pricing */}
+            <div className='flash-card'>
+              <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('价格')}</div>
+              <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('按量付费')}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px' }}>
+                <span className='mono' style={{ fontSize: '36px', fontWeight: 800, color: 'var(--flash-cyan-light)' }}>$0</span>
+                <span style={{ fontSize: '13px', color: 'var(--flash-text-muted)', lineHeight: 1.5 }}>{t('开始使用')}<br/>{t('按用量计费')}</span>
+              </div>
+              <a href='/pricing' style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '12px', color: 'var(--flash-cyan)', fontSize: '13px', fontWeight: 500, textDecoration: 'none' }}>
+                {t('查看完整价格')} →
+              </a>
+            </div>
+
+            {/* Card 6: Providers (span 3) */}
+            <div className='flash-card span-3'>
+              <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('生态系统')}</div>
+              <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('40+ AI 供应商，一个 API')}</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '16px' }}>
+                {[
+                  { name: 'OpenAI', icon: OpenAI, color: '#10a37f' },
+                  { name: 'Anthropic', icon: Claude, color: '#d97706' },
+                  { name: 'Google Gemini', icon: Gemini, color: '#4285f4' },
+                  { name: 'DeepSeek', icon: DeepSeek, color: '#0066ff' },
+                  { name: 'Qwen', icon: Qwen, color: '#6366f1' },
+                  { name: 'Azure', icon: AzureAI, color: '#0078d4' },
+                  { name: 'Moonshot', icon: Moonshot, color: '#8b5cf6' },
+                  { name: 'Zhipu', icon: Zhipu, color: '#3b82f6' },
+                  { name: 'XAI', icon: XAI, color: '#000000' },
+                ].map(({ name, icon: Icon, color }) => (
+                  <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px', background: 'rgba(6,182,212,0.05)', border: '1px solid rgba(30,41,59,0.8)', fontSize: '12px', color: 'var(--flash-text-muted)', fontWeight: 500, transition: 'all 0.3s' }}>
+                    <Icon size={16} />
+                    {name}
+                  </div>
+                ))}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px', background: 'rgba(6,182,212,0.05)', border: '1px solid rgba(30,41,59,0.8)', fontSize: '12px', color: 'var(--flash-text-muted)', fontWeight: 500 }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--flash-cyan)' }}></div>
+                  +30 {t('更多')}
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       ) : (
         <div className='overflow-x-hidden w-full'>

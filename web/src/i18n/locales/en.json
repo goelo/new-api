@@ -3361,6 +3361,24 @@
     "从剪贴板粘贴配置": "Paste Config",
     "剪贴板中未检测到连接信息": "No connection info found in clipboard",
     "连接信息已填入": "Connection info applied",
-    "无法读取剪贴板": "Cannot read clipboard"
+    "无法读取剪贴板": "Cannot read clipboard",
+    "统一 AI 网关 — 支持 40+ 供应商": "Unified AI Gateway — 40+ Providers",
+    "一个 API": "One API.",
+    "所有模型": "Every Model.",
+    "通过一个闪电般快速的端点，访问 OpenAI、Claude、Gemini、DeepSeek 等 40+ AI 供应商。兼容 OpenAI 接口，零迁移成本。": "Access OpenAI, Claude, Gemini, DeepSeek and 40+ AI providers through a single, lightning-fast endpoint. OpenAI-compatible. Zero migration.",
+    "实时演示": "Live Demo",
+    "即刻体验": "See it in action",
+    "性能": "Performance",
+    "闪电般快速": "Lightning fast",
+    "附加网关延迟": "Added gateway latency",
+    "兼容性": "Compatibility",
+    "一行代码切换": "One line change",
+    "OpenAI 直接替换。更改 base URL，其他代码不变。": "Drop-in OpenAI replacement. Change your base URL, keep everything else.",
+    "接入点": "Endpoint",
+    "你的 API 地址": "Your API base",
+    "兼容 OpenAI 的接入点，适用于任何 SDK。": "OpenAI-compatible endpoint. Works with any SDK.",
+    "已复制": "Copied!",
+    "生态系统": "Ecosystem",
+    "40+ AI 供应商，一个 API": "40+ AI providers, one API"
   }
 }

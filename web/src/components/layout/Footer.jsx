@@ -214,6 +214,71 @@ const FooterBar = () => {
     [logo, systemName, t, currentYear, isDemoSiteMode],
   );
 
+  const docsLink = statusState?.status?.docs_link || '/docs';
+
+  const flashFooter = useMemo(
+    () => (
+      <div
+        className='flash-footer'
+        style={{
+          borderTop: '1px solid var(--flash-border)',
+          padding: '40px 32px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          maxWidth: '1100px',
+          margin: '0 auto',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '13px',
+            color: 'var(--flash-text-dim)',
+          }}
+        >
+          <svg
+            width='16'
+            height='16'
+            viewBox='0 0 24 24'
+            fill='var(--flash-cyan)'
+            opacity='0.5'
+          >
+            <path d='M13 2L3 14h9l-1 8 10-12h-9l1-8z' />
+          </svg>
+          <span>{systemName}</span>
+          <span>·</span>
+          <span>
+            © {currentYear} {systemName}
+          </span>
+        </div>
+        <div style={{ display: 'flex', gap: '24px' }}>
+          <Typography.Text
+            link={{ href: docsLink }}
+            style={{ fontSize: '13px', color: 'var(--flash-text-dim)' }}
+          >
+            {t('文档')}
+          </Typography.Text>
+          <Typography.Text
+            link={{ href: '/user-agreement' }}
+            style={{ fontSize: '13px', color: 'var(--flash-text-dim)' }}
+          >
+            {t('用户协议')}
+          </Typography.Text>
+          <Typography.Text
+            link={{ href: '/privacy-policy' }}
+            style={{ fontSize: '13px', color: 'var(--flash-text-dim)' }}
+          >
+            {t('隐私政策')}
+          </Typography.Text>
+        </div>
+      </div>
+    ),
+    [systemName, currentYear, docsLink, t],
+  );
+
   useEffect(() => {
     loadFooter();
   }, []);
@@ -242,8 +307,10 @@ const FooterBar = () => {
             </div>
           </div>
         </footer>
-      ) : (
+      ) : isDemoSiteMode ? (
         customFooter
+      ) : (
+        flashFooter
       )}
     </div>
   );
