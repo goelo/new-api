@@ -27,7 +27,7 @@ services:
       - new-api-network
 
   new-api:
-    image: calciumion/new-api:latest
+    build: .  # 改为构建本地代码，而不是用官方镜像
     container_name: new-api
     restart: always
     command: --log-dir /app/logs
