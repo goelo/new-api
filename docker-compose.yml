@@ -15,13 +15,25 @@
 version: '3.4' # For compatibility with older Docker versions
 
 services:
+  web:
+    build: ./web
+    container_name: new-api-web
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - new-api
+    networks:
+      - new-api-network
+
   new-api:
     image: calciumion/new-api:latest
     container_name: new-api
     restart: always
     command: --log-dir /app/logs
-    ports:
-      - "3000:3000"
+    # 不再暴露 3000 端口到宿主机，只在内部网络访问
+    expose:
+      - "3000"
     volumes:
       - ./data:/data
       - ./logs:/app/logs
