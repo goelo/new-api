@@ -198,7 +198,7 @@ const Home = () => {
             <div className='flash-card span-2'>
               <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('实时演示')}</div>
               <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('即刻体验')}</div>
-              <div style={{ background: '#020617', border: '1px solid var(--flash-border)', borderRadius: '10px', marginTop: '16px', overflow: 'hidden' }}>
+              <div style={{ background: 'var(--flash-bg-code)', border: '1px solid var(--flash-border)', borderRadius: '10px', marginTop: '16px', overflow: 'hidden' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 14px', borderBottom: '1px solid var(--flash-border)' }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }}></div>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#eab308' }}></div>
@@ -244,7 +244,7 @@ const Home = () => {
             <div className='flash-card'>
               <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('接入点')}</div>
               <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('你的 API 地址')}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', padding: '12px 16px', background: '#020617', border: '1px solid var(--flash-border)', borderRadius: '10px', fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', color: 'var(--flash-cyan-light)', transition: 'all 0.3s', cursor: 'pointer' }} onClick={handleCopyEndpoint}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', padding: '12px 16px', background: 'var(--flash-bg-code)', border: '1px solid var(--flash-border)', borderRadius: '10px', fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', color: 'var(--flash-cyan-light)', transition: 'all 0.3s', cursor: 'pointer' }} onClick={handleCopyEndpoint}>
                 <span style={{ color: 'var(--flash-text-dim)' }}>https://</span>
                 {serverAddress.replace('https://', '').replace('http://', '')}
                 <span style={{ marginLeft: 'auto', padding: '4px 10px', borderRadius: '6px', background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.2)', color: 'var(--flash-cyan)', fontSize: '11px', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>
