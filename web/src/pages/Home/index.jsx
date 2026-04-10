@@ -172,21 +172,21 @@ const Home = () => {
 
           {/* Hero Section */}
           <section style={{ textAlign: 'center', padding: '100px 32px 48px', position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '100px', border: '1px solid var(--flash-border)', background: 'rgba(6,182,212,0.05)', fontSize: '12px', color: 'var(--flash-cyan-light)', fontWeight: 500, marginBottom: '24px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '100px', border: '1px solid var(--flash-border)', background: 'rgba(196,149,106,0.1)', fontSize: '12px', color: 'var(--flash-cyan)', fontWeight: 500, marginBottom: '24px' }}>
               <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--flash-cyan)', boxShadow: '0 0 8px var(--flash-cyan)', animation: 'flash-pulse 2s ease-in-out infinite' }}></span>
               {t('统一 AI 网关 — 支持 40+ 供应商')}
             </div>
-            <h1 style={{ fontSize: isMobile ? '36px' : '52px', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: '16px', background: 'linear-gradient(135deg, #fff 0%, var(--flash-cyan-light) 50%, var(--flash-blue) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+            <h1 style={{ fontSize: isMobile ? '36px' : '52px', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: '16px', color: 'var(--flash-text-primary)' }}>
               {t('一个 API')}<br/>{t('所有模型')}
             </h1>
             <p style={{ fontSize: isMobile ? '15px' : '18px', color: 'var(--flash-text-muted)', maxWidth: '520px', margin: '0 auto 32px', lineHeight: 1.6 }}>
               {t('通过一个闪电般快速的端点，访问 OpenAI、Claude、Gemini、DeepSeek 等 40+ AI 供应商。兼容 OpenAI 接口，零迁移成本。')}
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Button theme='solid' type='primary' size={isMobile ? 'default' : 'large'} onClick={() => navigate('/console')} style={{ borderRadius: '8px', padding: '12px 28px', fontSize: '15px' }}>
+              <Button theme='solid' type='primary' size={isMobile ? 'default' : 'large'} onClick={() => navigate('/console')} style={{ borderRadius: '8px', padding: '12px 28px', fontSize: '15px', background: 'var(--flash-cyan)', border: 'none', color: '#fff' }}>
                 {t('获取密钥')} →
               </Button>
-              <Button size={isMobile ? 'default' : 'large'} onClick={() => window.open(docsLink || '/docs')} style={{ borderRadius: '8px', padding: '12px 28px', fontSize: '15px' }}>
+              <Button size={isMobile ? 'default' : 'large'} onClick={() => window.open(docsLink || '/docs')} style={{ borderRadius: '8px', padding: '12px 28px', fontSize: '15px', background: 'var(--flash-bg-code)', border: '1px solid var(--flash-border)', color: 'var(--flash-text-primary)' }}>
                 {t('查看文档')}
               </Button>
             </div>
@@ -219,12 +219,12 @@ const Home = () => {
               <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('性能')}</div>
               <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('闪电般快速')}</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '16px' }}>
-                <span className='mono' style={{ fontSize: '56px', fontWeight: 800, color: 'var(--flash-cyan-light)', lineHeight: 1, textShadow: '0 0 40px rgba(6,182,212,0.3)' }}>&lt;50</span>
+                <span className='mono' style={{ fontSize: '56px', fontWeight: 800, color: 'var(--flash-cyan)', lineHeight: 1, textShadow: '0 0 40px rgba(196,149,106,0.3)' }}>&lt;50</span>
                 <span style={{ fontSize: '20px', color: 'var(--flash-text-dim)', fontWeight: 500 }}>ms</span>
               </div>
               <div style={{ fontSize: '14px', color: 'var(--flash-text-muted)', lineHeight: 1.5 }}>{t('附加网关延迟')}</div>
               <div style={{ marginTop: '16px', height: '4px', borderRadius: '2px', background: 'var(--flash-border)', overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: '15%', borderRadius: '2px', background: 'linear-gradient(90deg, var(--flash-cyan), var(--flash-blue))', boxShadow: '0 0 10px rgba(6,182,212,0.5)', animation: 'flash-speed-pulse 2s ease-in-out infinite' }} className='flash-speed-bar-fill'></div>
+                <div style={{ height: '100%', width: '15%', borderRadius: '2px', background: 'linear-gradient(90deg, var(--flash-cyan), var(--flash-blue))', boxShadow: '0 0 10px rgba(196,149,106,0.5)', animation: 'flash-speed-pulse 2s ease-in-out infinite' }} className='flash-speed-bar-fill'></div>
               </div>
             </div>
 
@@ -244,10 +244,10 @@ const Home = () => {
             <div className='flash-card'>
               <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('接入点')}</div>
               <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('你的 API 地址')}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', padding: '12px 16px', background: 'var(--flash-bg-code)', border: '1px solid var(--flash-border)', borderRadius: '10px', fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', color: 'var(--flash-cyan-light)', transition: 'all 0.3s', cursor: 'pointer' }} onClick={handleCopyEndpoint}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', padding: '12px 16px', background: 'var(--flash-bg-code)', border: '1px solid var(--flash-border)', borderRadius: '10px', fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', color: 'var(--flash-cyan)', transition: 'all 0.3s', cursor: 'pointer' }} onClick={handleCopyEndpoint}>
                 <span style={{ color: 'var(--flash-text-dim)' }}>https://</span>
                 {serverAddress.replace('https://', '').replace('http://', '')}
-                <span style={{ marginLeft: 'auto', padding: '4px 10px', borderRadius: '6px', background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.2)', color: 'var(--flash-cyan)', fontSize: '11px', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>
+                <span style={{ marginLeft: 'auto', padding: '4px 10px', borderRadius: '6px', background: 'rgba(196,149,106,0.1)', border: '1px solid rgba(196,149,106,0.2)', color: 'var(--flash-cyan)', fontSize: '11px', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>
                   {copiedEndpoint ? t('已复制') : 'COPY'}
                 </span>
               </div>
@@ -259,7 +259,7 @@ const Home = () => {
               <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--flash-cyan)', marginBottom: '12px' }}>{t('价格')}</div>
               <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--flash-text-primary)', marginBottom: '8px' }}>{t('按量付费')}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px' }}>
-                <span className='mono' style={{ fontSize: '36px', fontWeight: 800, color: 'var(--flash-cyan-light)' }}>$0</span>
+                <span className='mono' style={{ fontSize: '36px', fontWeight: 800, color: 'var(--flash-cyan)' }}>$0</span>
                 <span style={{ fontSize: '13px', color: 'var(--flash-text-muted)', lineHeight: 1.5 }}>{t('开始使用')}<br/>{t('按用量计费')}</span>
               </div>
               <a href='/pricing' style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '12px', color: 'var(--flash-cyan)', fontSize: '13px', fontWeight: 500, textDecoration: 'none' }}>
@@ -283,12 +283,12 @@ const Home = () => {
                   { name: 'Zhipu', icon: Zhipu, color: '#3b82f6' },
                   { name: 'XAI', icon: XAI, color: '#000000' },
                 ].map(({ name, icon: Icon, color }) => (
-                  <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px', background: 'rgba(6,182,212,0.05)', border: '1px solid rgba(30,41,59,0.8)', fontSize: '12px', color: 'var(--flash-text-muted)', fontWeight: 500, transition: 'all 0.3s' }}>
+                  <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px', background: 'rgba(196,149,106,0.05)', border: '1px solid rgba(240,236,228,0.8)', fontSize: '12px', color: 'var(--flash-text-muted)', fontWeight: 500, transition: 'all 0.3s' }}>
                     <Icon size={16} />
                     {name}
                   </div>
                 ))}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px', background: 'rgba(6,182,212,0.05)', border: '1px solid rgba(30,41,59,0.8)', fontSize: '12px', color: 'var(--flash-text-muted)', fontWeight: 500 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px', background: 'rgba(196,149,106,0.05)', border: '1px solid rgba(240,236,228,0.8)', fontSize: '12px', color: 'var(--flash-text-muted)', fontWeight: 500 }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--flash-cyan)' }}></div>
                   +30 {t('更多')}
                 </div>
