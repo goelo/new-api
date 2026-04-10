@@ -13,6 +13,39 @@
   @tailwind utilities;
 }
 
+/* ==================== 暖色主题 — 覆盖 Semi Design 主色 ==================== */
+/* 将 Semi 默认蓝色主色替换为与首页一致的暖棕色 #c4956a */
+body {
+  --semi-color-primary: #c4956a;
+  --semi-color-primary-hover: #b8855a;
+  --semi-color-primary-active: #a8754a;
+  --semi-color-primary-disabled: #d4b598;
+  --semi-color-primary-light-default: rgba(196, 149, 106, 0.08);
+  --semi-color-primary-light-hover: rgba(196, 149, 106, 0.15);
+  --semi-color-primary-light-active: rgba(196, 149, 106, 0.22);
+  --semi-color-link: #c4956a;
+  --semi-color-link-hover: #b8855a;
+  --semi-color-link-active: #a8754a;
+  --semi-color-link-visited: #a8754a;
+  --semi-color-focus-border: rgba(196, 149, 106, 0.6);
+}
+
+/* 暗色模式下保持暖色但稍微提亮以保证可读性 */
+body[theme-mode="dark"] {
+  --semi-color-primary: #d4a87a;
+  --semi-color-primary-hover: #c89868;
+  --semi-color-primary-active: #bc8858;
+  --semi-color-primary-disabled: #8a7560;
+  --semi-color-primary-light-default: rgba(212, 168, 122, 0.12);
+  --semi-color-primary-light-hover: rgba(212, 168, 122, 0.2);
+  --semi-color-primary-light-active: rgba(212, 168, 122, 0.28);
+  --semi-color-link: #d4a87a;
+  --semi-color-link-hover: #c89868;
+  --semi-color-link-active: #bc8858;
+  --semi-color-link-visited: #bc8858;
+  --semi-color-focus-border: rgba(212, 168, 122, 0.5);
+}
+
 /* ==================== 全局基础样式 ==================== */
 :root {
   --sidebar-width: 180px;

@@ -16,7 +16,8 @@ version: '3.4' # For compatibility with older Docker versions
 
 services:
   new-api:
-    image: calciumion/new-api:latest  # 使用官方镜像（与 VPS 保持一致）
+    build: .  # 从本地源码构建，包含自定义暖色主题
+    image: new-api:custom  # 构建后的镜像标签
     container_name: new-api
     restart: always
     command: --log-dir /app/logs

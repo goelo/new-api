@@ -672,7 +672,7 @@ const LoginForm = () => {
                             href='/user-agreement'
                             target='_blank'
                             rel='noopener noreferrer'
-                            className='text-blue-600 hover:text-blue-800 mx-1'
+                            className='mx-1' style={{ color: '#c4956a' }}
                           >
                             {t('用户协议')}
                           </a>
@@ -685,7 +685,7 @@ const LoginForm = () => {
                             href='/privacy-policy'
                             target='_blank'
                             rel='noopener noreferrer'
-                            className='text-blue-600 hover:text-blue-800 mx-1'
+                            className='mx-1' style={{ color: '#c4956a' }}
                           >
                             {t('隐私政策')}
                           </a>
@@ -702,7 +702,7 @@ const LoginForm = () => {
                     {t('没有账户？')}{' '}
                     <Link
                       to='/register'
-                      className='text-blue-600 hover:text-blue-800 font-medium'
+                      className='font-medium' style={{ color: '#c4956a' }}
                     >
                       {t('注册')}
                     </Link>
@@ -778,7 +778,7 @@ const LoginForm = () => {
                               href='/user-agreement'
                               target='_blank'
                               rel='noopener noreferrer'
-                              className='text-blue-600 hover:text-blue-800 mx-1'
+                              className='mx-1' style={{ color: '#c4956a' }}
                             >
                               {t('用户协议')}
                             </a>
@@ -791,7 +791,7 @@ const LoginForm = () => {
                               href='/privacy-policy'
                               target='_blank'
                               rel='noopener noreferrer'
-                              className='text-blue-600 hover:text-blue-800 mx-1'
+                              className='mx-1' style={{ color: '#c4956a' }}
                             >
                               {t('隐私政策')}
                             </a>
@@ -855,7 +855,7 @@ const LoginForm = () => {
                     {t('没有账户？')}{' '}
                     <Link
                       to='/register'
-                      className='text-blue-600 hover:text-blue-800 font-medium'
+                      className='font-medium' style={{ color: '#c4956a' }}
                     >
                       {t('注册')}
                     </Link>
@@ -947,15 +947,15 @@ const LoginForm = () => {
   };
 
   return (
-    <div className='relative overflow-hidden bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-      {/* 背景模糊晕染球 */}
+    <div className='relative overflow-hidden flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8' style={{ background: '#faf8f5' }}>
+      {/* 背景模糊晕染球 — 暖色调 */}
       <div
-        className='blur-ball blur-ball-indigo'
-        style={{ top: '-80px', right: '-80px', transform: 'none' }}
+        className='blur-ball'
+        style={{ top: '-80px', right: '-80px', transform: 'none', background: '#c4956a' }}
       />
       <div
-        className='blur-ball blur-ball-teal'
-        style={{ top: '50%', left: '-120px' }}
+        className='blur-ball'
+        style={{ top: '50%', left: '-120px', background: '#d4a87a' }}
       />
       <div className='w-full max-w-sm mt-[60px]'>
         {showEmailLogin ||

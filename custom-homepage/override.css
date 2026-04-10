@@ -1,0 +1,85 @@
+/*
+ * 暖色主题覆盖 — 通过 nginx 注入到官方 new-api 前端
+ * 将 Semi Design 默认蓝色主色替换为与自定义首页一致的暖棕色 #c4956a
+ */
+
+/* ==================== Semi Design 主色覆盖 ==================== */
+body {
+  --semi-color-primary: #c4956a !important;
+  --semi-color-primary-hover: #b8855a !important;
+  --semi-color-primary-active: #a8754a !important;
+  --semi-color-primary-disabled: #d4b598 !important;
+  --semi-color-primary-light-default: rgba(196, 149, 106, 0.08) !important;
+  --semi-color-primary-light-hover: rgba(196, 149, 106, 0.15) !important;
+  --semi-color-primary-light-active: rgba(196, 149, 106, 0.22) !important;
+  --semi-color-link: #c4956a !important;
+  --semi-color-link-hover: #b8855a !important;
+  --semi-color-link-active: #a8754a !important;
+  --semi-color-link-visited: #a8754a !important;
+  --semi-color-focus-border: rgba(196, 149, 106, 0.6) !important;
+}
+
+/* 暗色模式 */
+body[theme-mode="dark"] {
+  --semi-color-primary: #d4a87a !important;
+  --semi-color-primary-hover: #c89868 !important;
+  --semi-color-primary-active: #bc8858 !important;
+  --semi-color-primary-disabled: #8a7560 !important;
+  --semi-color-primary-light-default: rgba(212, 168, 122, 0.12) !important;
+  --semi-color-primary-light-hover: rgba(212, 168, 122, 0.2) !important;
+  --semi-color-primary-light-active: rgba(212, 168, 122, 0.28) !important;
+  --semi-color-link: #d4a87a !important;
+  --semi-color-link-hover: #c89868 !important;
+  --semi-color-link-active: #bc8858 !important;
+  --semi-color-link-visited: #bc8858 !important;
+  --semi-color-focus-border: rgba(212, 168, 122, 0.5) !important;
+}
+
+/* ==================== 登录/注册页面背景 ==================== */
+/* 把冷灰背景改为暖米白 */
+.bg-gray-100 {
+  background-color: #faf8f5 !important;
+}
+
+/* ==================== 模糊晕染球颜色 ==================== */
+.blur-ball-indigo {
+  background: #c4956a !important;
+}
+
+.blur-ball-teal {
+  background: #d4a87a !important;
+}
+
+/* ==================== 蓝色链接改为暖棕色 ==================== */
+.text-blue-600 {
+  color: #c4956a !important;
+}
+
+a.text-blue-600:hover,
+.hover\:text-blue-800:hover {
+  color: #a8754a !important;
+}
+
+/* ==================== Header 统一暖色风格 ==================== */
+/* 让所有页面的 header 都使用暖色背景，不只是首页 */
+header.sticky {
+  background: rgba(250, 248, 245, 0.85) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid #f0ece4;
+}
+
+body[theme-mode="dark"] header.sticky {
+  background: rgba(26, 26, 26, 0.85) !important;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+/* ==================== 侧边栏选中项暖色 ==================== */
+.sidebar-nav-item:hover {
+  background-color: rgba(196, 149, 106, 0.08) !important;
+  color: #c4956a !important;
+}
+
+.sidebar-nav-item-selected {
+  background-color: rgba(196, 149, 106, 0.12) !important;
+  color: #c4956a !important;
+}
