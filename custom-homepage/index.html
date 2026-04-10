@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New API - 统一的 AI 模型聚合与分发网关</title>
+    <meta name="description" content="统一的 AI 模型聚合与分发网关，支持将各类大语言模型跨格式转换为 OpenAI、Claude、Gemini 兼容接口">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                统一 AI 网关 — 支持 40+ 供应商
+            </div>
+            <h1 class="hero-title">
+                一个 API<br>所有模型
+            </h1>
+            <p class="hero-subtitle">
+                通过一个闪电般快速的端点，访问 OpenAI、Claude、Gemini、DeepSeek 等 40+ AI 供应商。兼容 OpenAI 接口，零迁移成本。
+            </p>
+            <div class="hero-buttons">
+                <a href="/console" class="btn btn-primary">获取密钥 →</a>
+                <a href="/docs" class="btn btn-secondary">查看文档</a>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-label">实时演示</div>
+                <h3 class="feature-title">即刻体验</h3>
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                    </div>
+                    <div class="terminal-body">
+                        <div><span class="prompt">$</span> <span class="cmd">curl -X POST</span> <span class="url"><script>document.write(window.location.origin)</script>/v1/chat/completions</span> \</div>
+                        <div>&nbsp;&nbsp;<span class="cmd">-H</span> <span class="string">"Authorization: Bearer sk-..."</span> \</div>
+                        <div>&nbsp;&nbsp;<span class="cmd">-d</span> <span class="json">'{"model": "gpt-4o", "messages": [...]}'</span></div>
+                        <div class="success">✓ 200 OK · 47ms · streamed 1,204 tokens</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-label">性能</div>
+                <h3 class="feature-title">闪电般快速</h3>
+                <div class="metric">
+                    <span class="metric-value">&lt;50</span>
+                    <span class="metric-unit">ms</span>
+                </div>
+                <p class="feature-desc">附加网关延迟</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-label">兼容性</div>
+                <h3 class="feature-title">一行代码切换</h3>
+                <p class="feature-desc">OpenAI 直接替换。更改 base URL，其他代码不变。</p>
+                <div class="code-example">
+                    <div class="code-line old">base_url = "api.openai.com"</div>
+                    <div class="code-line new"><script>document.write('"' + window.location.host + '"')</script></div>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-label">价格</div>
+                <h3 class="feature-title">按量付费</h3>
+                <div class="price">
+                    <span class="price-value">$0</span>
+                    <span class="price-desc">开始使用<br>按用量计费</span>
+                </div>
+                <a href="/pricing" class="feature-link">查看完整价格 →</a>
+            </div>
+        </section>
+
+        <!-- Providers -->
+        <section class="providers">
+            <div class="feature-label">生态系统</div>
+            <h3 class="feature-title">40+ AI 供应商，一个 API</h3>
+            <div class="provider-list">
+                <span class="provider-tag">OpenAI</span>
+                <span class="provider-tag">Anthropic</span>
+                <span class="provider-tag">Google Gemini</span>
+                <span class="provider-tag">DeepSeek</span>
+                <span class="provider-tag">Qwen</span>
+                <span class="provider-tag">Azure</span>
+                <span class="provider-tag">Moonshot</span>
+                <span class="provider-tag">Zhipu</span>
+                <span class="provider-tag">XAI</span>
+                <span class="provider-tag more">+30 更多</span>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2026 New API. All rights reserved</p>
+        </footer>
+    </div>
+</body>
+</html>
