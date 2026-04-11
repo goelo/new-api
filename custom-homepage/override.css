@@ -73,6 +73,68 @@ body[theme-mode="dark"] header.sticky {
   border-bottom: 1px solid #3a3a3a;
 }
 
+/* ==================== 登录/注册页面 — 完整暖色风格 ==================== */
+
+/* 邮箱登录按钮：冷黑 → 暖棕 */
+.bg-black {
+  background-color: #c4956a !important;
+}
+.hover\:bg-gray-800:hover {
+  background-color: #b8855a !important;
+}
+
+/* OAuth 按钮边框/悬停 → 暖色调 */
+.border-gray-200 {
+  border-color: #e8ddd0 !important;
+}
+.hover\:bg-gray-50:hover {
+  background-color: rgba(196, 149, 106, 0.06) !important;
+}
+
+/* 标题文字 → 暖灰 */
+.\!text-gray-800,
+.text-gray-800 {
+  color: #5a4a3a !important;
+}
+html[class*="dark"] .\!text-gray-800,
+body[theme-mode="dark"] .\!text-gray-800,
+body[theme-mode="dark"] .text-gray-800 {
+  color: #e0d6cc !important;
+}
+
+/* 协议文字 → 暖灰 */
+.text-gray-600 {
+  color: #8a7a6a !important;
+}
+
+/* 分割线 → 暖色调 */
+.bg-gray-100 .semi-divider {
+  border-color: #e8ddd0;
+}
+
+/* 2FA 成功图标 → 暖色 */
+.bg-green-100 {
+  background-color: rgba(196, 149, 106, 0.15) !important;
+}
+.text-green-600 {
+  color: #c4956a !important;
+}
+body[theme-mode="dark"] .bg-green-900 {
+  background-color: rgba(196, 149, 106, 0.2) !important;
+}
+body[theme-mode="dark"] .text-green-400 {
+  color: #d4a87a !important;
+}
+
+/* Card 卡片 → 暖白底色 + 柔和阴影 */
+.bg-gray-100 .semi-card {
+  background: #fffdf9 !important;
+  box-shadow: 0 4px 24px rgba(180, 140, 100, 0.08) !important;
+}
+body[theme-mode="dark"] .semi-card {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
 /* ==================== 侧边栏选中项暖色 ==================== */
 .sidebar-nav-item:hover {
   background-color: rgba(196, 149, 106, 0.08) !important;
@@ -82,4 +144,11 @@ body[theme-mode="dark"] header.sticky {
 .sidebar-nav-item-selected {
   background-color: rgba(196, 149, 106, 0.12) !important;
   color: #c4956a !important;
+}
+
+/* ==================== 注册页面额外覆盖 ==================== */
+/* 注册页同样使用暖色背景 */
+.bg-gray-100 .blur-ball-indigo,
+.bg-gray-100 .blur-ball-teal {
+  opacity: 0.3;
 }
