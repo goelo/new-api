@@ -101,5 +101,55 @@
             <p>© 2026 New API. All rights reserved</p>
         </footer>
     </div>
+    <!-- 公告弹窗 -->
+    <div id="notice-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);justify-content:center;align-items:center;">
+        <div id="notice-box" style="background:#fff;border-radius:12px;max-width:560px;width:90%;max-height:80vh;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;animation:noticeIn .25s ease;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid #f0f0f0;">
+                <span style="font-size:16px;font-weight:600;color:#1a1a1a;">📢 系统公告</span>
+                <button id="notice-close" style="background:none;border:none;font-size:20px;cursor:pointer;color:#999;padding:0 4px;line-height:1;">&times;</button>
+            </div>
+            <div id="notice-body" style="padding:20px 24px;overflow-y:auto;max-height:60vh;line-height:1.7;color:#333;font-size:14px;"></div>
+            <div style="padding:12px 24px;border-top:1px solid #f0f0f0;display:flex;justify-content:flex-end;gap:8px;">
+                <button id="notice-today" style="padding:6px 16px;border-radius:6px;border:1px solid #d9d9d9;background:#fff;cursor:pointer;font-size:13px;color:#666;">今日不再显示</button>
+                <button id="notice-ok" style="padding:6px 16px;border-radius:6px;border:none;background:#c4956a;color:#fff;cursor:pointer;font-size:13px;">我知道了</button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes noticeIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+        #notice-body img{max-width:100%}
+        #notice-body a{color:#c4956a;text-decoration:underline}
+        #notice-body p{margin:0 0 8px}
+        #notice-body ul,#notice-body ol{padding-left:20px;margin:0 0 8px}
+    </style>
+    <script>
+    (function(){
+        var KEY='notice_close_date',today=new Date().toDateString();
+        if(localStorage.getItem(KEY)===today)return;
+        fetch('/api/notice').then(function(r){return r.json()}).then(function(res){
+            if(!res.success||!res.data||!res.data.trim())return;
+            // 简易 markdown 转 HTML
+            var md=res.data;
+            md=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            md=md.replace(/^### (.+)$/gm,'<h3>$1</h3>');
+            md=md.replace(/^## (.+)$/gm,'<h2>$1</h2>');
+            md=md.replace(/^# (.+)$/gm,'<h1>$1</h1>');
+            md=md.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+            md=md.replace(/\*(.+?)\*/g,'<em>$1</em>');
+            md=md.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>');
+            md=md.replace(/^[•·] (.+)$/gm,'<li>$1</li>');
+            md=md.replace(/(<li>.*<\/li>)/s,function(m){return '<ul>'+m+'</ul>'});
+            md=md.replace(/\n/g,'<br>');
+            document.getElementById('notice-body').innerHTML=md;
+            var overlay=document.getElementById('notice-overlay');
+            overlay.style.display='flex';
+            function close(){overlay.style.display='none';}
+            document.getElementById('notice-close').onclick=close;
+            document.getElementById('notice-ok').onclick=close;
+            document.getElementById('notice-today').onclick=function(){localStorage.setItem(KEY,today);close();};
+            overlay.addEventListener('click',function(e){if(e.target===overlay)close();});
+        }).catch(function(){});
+    })();
+    </script>
 </body>
 </html>
