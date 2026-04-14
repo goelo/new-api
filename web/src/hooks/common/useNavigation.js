@@ -24,9 +24,8 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
     // 默认配置，如果没有传入配置则显示所有模块
     const defaultModules = {
       home: true,
-      console: true,
       pricing: true,
-      docs: true,
+      tutorial: true,
       about: true,
     };
 
@@ -40,27 +39,17 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
         to: '/',
       },
       {
-        text: t('控制台'),
-        itemKey: 'console',
-        to: '/console',
-      },
-      {
-        text: t('模型广场'),
+        text: t('定价'),
         itemKey: 'pricing',
         to: '/pricing',
       },
-      ...(docsLink
-        ? [
-            {
-              text: t('文档'),
-              itemKey: 'docs',
-              isExternal: true,
-              externalLink: docsLink,
-            },
-          ]
-        : []),
       {
-        text: t('关于'),
+        text: t('使用教程'),
+        itemKey: 'tutorial',
+        to: '#',
+      },
+      {
+        text: t('关于我们'),
         itemKey: 'about',
         to: '/about',
       },
@@ -68,9 +57,6 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
 
     // 根据配置过滤导航链接
     return allLinks.filter((link) => {
-      if (link.itemKey === 'docs') {
-        return docsLink && modules.docs;
-      }
       if (link.itemKey === 'pricing') {
         // 支持新的pricing配置格式
         return typeof modules.pricing === 'object'
