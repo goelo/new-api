@@ -710,6 +710,240 @@ body {
     }
 }
 
+/* Docs Page */
+.docs-layout {
+    display: flex;
+    min-height: calc(100vh - 60px);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.docs-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    padding: 32px 0;
+    border-right: 1px solid var(--border);
+}
+
+.docs-nav-home {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 6px 0;
+    margin-bottom: 16px;
+}
+
+.docs-nav-group {
+    margin-bottom: 20px;
+}
+
+.docs-nav-group-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+}
+
+.docs-nav-link {
+    display: block;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 5px 0 5px 12px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.4;
+}
+
+.docs-nav-link:hover {
+    color: var(--accent);
+    border-left-color: var(--accent);
+}
+
+.docs-main {
+    flex: 1;
+    padding: 32px 0 60px 48px;
+    min-width: 0;
+}
+
+.docs-hero {
+    margin-bottom: 40px;
+}
+
+.docs-hero-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.docs-hero-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.docs-section {
+    margin-bottom: 48px;
+}
+
+.docs-section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.docs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.docs-grid-1 {
+    grid-template-columns: 1fr;
+}
+
+.docs-card {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.docs-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(196, 149, 106, 0.1);
+}
+
+.docs-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.docs-card-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.docs-card-link {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .docs-sidebar { display: none; }
+    .docs-main { padding-left: 0; }
+    .docs-grid { grid-template-columns: 1fr; }
+}
+
+/* About Page */
+.about-hero {
+    text-align: center;
+    padding: 60px 20px 40px;
+}
+
+.about-hero-title {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.about-hero-sub {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 28px;
+}
+
+.about-hero-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.about-who,
+.about-promise {
+    margin: 48px 0;
+}
+
+.about-section-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.about-text {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 12px;
+    max-width: 800px;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.about-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: box-shadow 0.3s;
+}
+
+.about-card:hover {
+    box-shadow: 0 4px 12px rgba(196, 149, 106, 0.1);
+}
+
+.about-card-icon {
+    font-size: 18px;
+    color: var(--accent);
+    margin-bottom: 10px;
+}
+
+.about-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.about-card-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+    .about-hero-title { font-size: 28px; }
+    .about-grid { grid-template-columns: 1fr; }
+}
+
 /* Footer */
 .footer {
     text-align: center;
