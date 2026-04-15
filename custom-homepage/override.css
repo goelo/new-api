@@ -135,6 +135,18 @@ body[theme-mode="dark"] .semi-card {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
 }
 
+/* ==================== 品牌名替换：New API → Forest API ==================== */
+/* 隐藏 header 内所有包含 "New API" 文字的品牌链接文本，用伪元素替换 */
+header a[href="/"] .header-logo-text,
+header a[href="/"] span:not([class*="icon"]):not([class*="logo"]) {
+  font-size: 0 !important;
+}
+header a[href="/"] .header-logo-text::after,
+header a[href="/"] span:not([class*="icon"]):not([class*="logo"])::after {
+  content: "Forest API";
+  font-size: 17px;
+}
+
 /* ==================== 侧边栏选中项暖色 ==================== */
 .sidebar-nav-item:hover {
   background-color: rgba(196, 149, 106, 0.08) !important;
