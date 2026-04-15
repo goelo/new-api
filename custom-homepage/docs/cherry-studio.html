@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherry Studio 配置教程 - Forest API</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="/" class="navbar-brand">Forest API</a>
+            <div class="navbar-links">
+                <a href="/">首页</a>
+                <a href="/pricing">定价</a>
+                <a href="/docs" class="active">使用教程</a>
+                <a href="/about">关于我们</a>
+            </div>
+            <div class="navbar-actions">
+                <a href="/login" class="btn-nav-login">登录</a>
+                <a href="/register" class="btn-nav-register">注册</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="doc-layout">
+        <aside class="docs-sidebar">
+            <nav class="docs-nav">
+                <a href="/docs" class="docs-nav-home">首页</a>
+                <div class="docs-nav-group">
+                    <div class="docs-nav-group-title">快速开始</div>
+                    <a href="/docs/nodejs" class="docs-nav-link">Node.js 环境安装教程</a>
+                    <a href="/docs/claude-code" class="docs-nav-link">Claude Code 配置教程</a>
+                    <a href="/docs/gemini-cli" class="docs-nav-link">Gemini CLI 配置教程</a>
+                    <a href="/docs/codex" class="docs-nav-link">Codex (OpenAI) 配置教程</a>
+                </div>
+                <div class="docs-nav-group">
+                    <div class="docs-nav-group-title">进阶玩法</div>
+                    <a href="/docs/openclaw" class="docs-nav-link">OpenClaw 部署教程</a>
+                    <a href="/docs/opencode" class="docs-nav-link">OpenCode 配置教程</a>
+                    <a href="/docs/cherry-studio" class="docs-nav-link" style="color:var(--accent);border-left-color:var(--accent)">Cherry Studio 配置教程</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="doc-main">
+            <div class="doc-breadcrumb">
+                <a href="/docs">Docs</a>
+                <span>›</span>
+                <span>进阶玩法</span>
+            </div>
+
+            <h1 class="doc-title">Cherry Studio 配置教程</h1>
+            <p class="doc-lead">在 Cherry Studio 中通过自定义服务商接入 Forest API 平台，快速使用 Claude、GPT 和 Gemini 模型。</p>
+            <div class="doc-note">
+                Cherry Studio 是一款支持多模型的桌面 AI 客户端，界面友好，适合日常对话和创作场景。通过自定义服务商功能，可以轻松接入 Forest API。
+            </div>
+
+            <h2 class="doc-h2" id="download">第一步：下载安装 Cherry Studio</h2>
+            <p class="doc-p">前往 <a href="https://cherry-ai.com" target="_blank">Cherry Studio 官网</a> 下载对应系统的安装包，按提示完成安装。</p>
+            <p class="doc-p">支持 Windows、macOS、Linux 三个平台。</p>
+
+            <h2 class="doc-h2" id="provider">第二步：添加自定义服务商</h2>
+            <p class="doc-p">打开 Cherry Studio，进入 <strong>设置 → 模型服务</strong>，点击左下角 <strong>添加服务商</strong>。</p>
+            <p class="doc-p">填写以下信息：</p>
+            <div class="doc-code">服务商名称：Forest API
+API 地址：https://forestapi.com/v1
+API Key：YOUR_API_KEY</div>
+            <p class="doc-p">请将 <strong>YOUR_API_KEY</strong> 替换为在 <a href="/token">控制台</a> 页面中复制的 API Key。</p>
+
+            <h2 class="doc-h2" id="models">第三步：添加模型</h2>
+            <p class="doc-p">在刚创建的 Forest API 服务商下，点击 <strong>添加模型</strong>，输入模型名称。常用模型：</p>
+            <div class="doc-code">claude-opus-4-5
+claude-sonnet-4-5
+claude-haiku-4-5
+gpt-4o
+gpt-4o-mini
+gemini-2.0-flash</div>
+            <p class="doc-p">添加完成后，点击 <strong>检测</strong> 按钮验证连接是否正常。</p>
+
+            <h2 class="doc-h2" id="start">第四步：开始对话</h2>
+            <p class="doc-p">回到主界面，点击 <strong>新建对话</strong>，在右上角模型选择器中切换到 Forest API 下的模型，即可开始使用。</p>
+
+            <div class="doc-next">
+                <div class="doc-next-title">更多教程</div>
+                <div class="doc-next-links">
+                    <a href="/docs/claude-code" class="doc-next-link">→ Claude Code 配置教程</a>
+                    <a href="/docs/opencode" class="doc-next-link">→ OpenCode 配置教程</a>
+                </div>
+            </div>
+        </main>
+
+        <aside class="doc-toc">
+            <div class="doc-toc-title">ON THIS PAGE</div>
+            <a href="#download" class="doc-toc-link">第一步：下载安装</a>
+            <a href="#provider" class="doc-toc-link">第二步：添加自定义服务商</a>
+            <a href="#models" class="doc-toc-link">第三步：添加模型</a>
+            <a href="#start" class="doc-toc-link">第四步：开始对话</a>
+        </aside>
+    </div>
+</body>
+</html>

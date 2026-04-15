@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw 部署教程 - Forest API</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="/" class="navbar-brand">Forest API</a>
+            <div class="navbar-links">
+                <a href="/">首页</a>
+                <a href="/pricing">定价</a>
+                <a href="/docs" class="active">使用教程</a>
+                <a href="/about">关于我们</a>
+            </div>
+            <div class="navbar-actions">
+                <a href="/login" class="btn-nav-login">登录</a>
+                <a href="/register" class="btn-nav-register">注册</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="doc-layout">
+        <aside class="docs-sidebar">
+            <nav class="docs-nav">
+                <a href="/docs" class="docs-nav-home">首页</a>
+                <div class="docs-nav-group">
+                    <div class="docs-nav-group-title">快速开始</div>
+                    <a href="/docs/nodejs" class="docs-nav-link">Node.js 环境安装教程</a>
+                    <a href="/docs/claude-code" class="docs-nav-link">Claude Code 配置教程</a>
+                    <a href="/docs/gemini-cli" class="docs-nav-link">Gemini CLI 配置教程</a>
+                    <a href="/docs/codex" class="docs-nav-link">Codex (OpenAI) 配置教程</a>
+                </div>
+                <div class="docs-nav-group">
+                    <div class="docs-nav-group-title">进阶玩法</div>
+                    <a href="/docs/openclaw" class="docs-nav-link" style="color:var(--accent);border-left-color:var(--accent)">OpenClaw 部署教程</a>
+                    <a href="/docs/opencode" class="docs-nav-link">OpenCode 配置教程</a>
+                    <a href="/docs/cherry-studio" class="docs-nav-link">Cherry Studio 配置教程</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="doc-main">
+            <div class="doc-breadcrumb">
+                <a href="/docs">Docs</a>
+                <span>›</span>
+                <span>进阶玩法</span>
+            </div>
+
+            <h1 class="doc-title">OpenClaw 部署教程</h1>
+            <p class="doc-lead">从零开始部署 OpenClaw Telegram 机器人，并接入 Forest API 平台。</p>
+            <div class="doc-note">
+                OpenClaw 是一个开源的 Telegram AI 机器人，支持多模型对话。本教程将引导你完成部署并接入 Forest API。<br>
+                需要准备：一台服务器（或本地机器）、Telegram Bot Token、Forest API Key。
+            </div>
+
+            <h2 class="doc-h2" id="prereq">前置准备</h2>
+
+            <h3 class="doc-h3">获取 Telegram Bot Token</h3>
+            <p class="doc-p">在 Telegram 中搜索 <strong>@BotFather</strong>，发送 <code style="background:var(--bg-code);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:13px">/newbot</code> 命令，按提示创建机器人并获取 Token。</p>
+
+            <h3 class="doc-h3">获取 Forest API Key</h3>
+            <p class="doc-p">登录 <a href="/token">控制台</a>，复制你的 API Key 备用。</p>
+
+            <h2 class="doc-h2" id="install">第一步：克隆项目</h2>
+            <div class="doc-code">git clone https://github.com/openclaw/openclaw.git
+cd openclaw</div>
+
+            <h2 class="doc-h2" id="config">第二步：配置环境变量</h2>
+            <p class="doc-p">复制示例配置文件：</p>
+            <div class="doc-code">cp .env.example .env</div>
+            <p class="doc-p">编辑 <code style="background:var(--bg-code);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:13px">.env</code> 文件，填入以下内容：</p>
+            <div class="doc-code">TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+OPENAI_API_KEY=YOUR_API_KEY
+OPENAI_BASE_URL=https://forestapi.com/v1
+DEFAULT_MODEL=claude-sonnet-4-5</div>
+            <p class="doc-p">请将 <strong>YOUR_API_KEY</strong> 替换为你的实际 API Key，<strong>your_telegram_bot_token</strong> 替换为 BotFather 给你的 Token。</p>
+
+            <h2 class="doc-h2" id="deploy">第三步：启动服务</h2>
+            <h3 class="doc-h3">方式一：Docker（推荐）</h3>
+            <div class="doc-code">docker compose up -d</div>
+
+            <h3 class="doc-h3">方式二：直接运行</h3>
+            <p class="doc-p">安装依赖：</p>
+            <div class="doc-code">npm install</div>
+            <p class="doc-p">启动：</p>
+            <div class="doc-code">npm start</div>
+
+            <h2 class="doc-h2" id="test">第四步：测试机器人</h2>
+            <p class="doc-p">在 Telegram 中找到你的机器人，发送 <code style="background:var(--bg-code);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:13px">/start</code> 命令，如果机器人正常回复，说明部署成功。</p>
+
+            <div class="doc-next">
+                <div class="doc-next-title">下一步</div>
+                <div class="doc-next-links">
+                    <a href="/docs/opencode" class="doc-next-link">→ OpenCode 配置教程</a>
+                    <a href="/docs/cherry-studio" class="doc-next-link">→ Cherry Studio 配置教程</a>
+                </div>
+            </div>
+        </main>
+
+        <aside class="doc-toc">
+            <div class="doc-toc-title">ON THIS PAGE</div>
+            <a href="#prereq" class="doc-toc-link">前置准备</a>
+            <a href="#install" class="doc-toc-link">第一步：克隆项目</a>
+            <a href="#config" class="doc-toc-link">第二步：配置环境变量</a>
+            <a href="#deploy" class="doc-toc-link">第三步：启动服务</a>
+            <a href="#test" class="doc-toc-link">第四步：测试机器人</a>
+        </aside>
+    </div>
+</body>
+</html>

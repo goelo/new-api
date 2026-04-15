@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenCode 配置教程 - Forest API</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="/" class="navbar-brand">Forest API</a>
+            <div class="navbar-links">
+                <a href="/">首页</a>
+                <a href="/pricing">定价</a>
+                <a href="/docs" class="active">使用教程</a>
+                <a href="/about">关于我们</a>
+            </div>
+            <div class="navbar-actions">
+                <a href="/login" class="btn-nav-login">登录</a>
+                <a href="/register" class="btn-nav-register">注册</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="doc-layout">
+        <aside class="docs-sidebar">
+            <nav class="docs-nav">
+                <a href="/docs" class="docs-nav-home">首页</a>
+                <div class="docs-nav-group">
+                    <div class="docs-nav-group-title">快速开始</div>
+                    <a href="/docs/nodejs" class="docs-nav-link">Node.js 环境安装教程</a>
+                    <a href="/docs/claude-code" class="docs-nav-link">Claude Code 配置教程</a>
+                    <a href="/docs/gemini-cli" class="docs-nav-link">Gemini CLI 配置教程</a>
+                    <a href="/docs/codex" class="docs-nav-link">Codex (OpenAI) 配置教程</a>
+                </div>
+                <div class="docs-nav-group">
+                    <div class="docs-nav-group-title">进阶玩法</div>
+                    <a href="/docs/openclaw" class="docs-nav-link">OpenClaw 部署教程</a>
+                    <a href="/docs/opencode" class="docs-nav-link" style="color:var(--accent);border-left-color:var(--accent)">OpenCode 配置教程</a>
+                    <a href="/docs/cherry-studio" class="docs-nav-link">Cherry Studio 配置教程</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="doc-main">
+            <div class="doc-breadcrumb">
+                <a href="/docs">Docs</a>
+                <span>›</span>
+                <span>进阶玩法</span>
+            </div>
+
+            <h1 class="doc-title">OpenCode 配置教程</h1>
+            <p class="doc-lead">通过配置文件将 OpenCode 接入 Forest API 平台，快速完成 Claude、GPT 和 Gemini 模型配置。</p>
+            <div class="doc-note">
+                OpenCode 是一个开源的终端 AI 编程助手，支持多种模型提供商。本教程将引导你配置 Forest API 作为后端服务。
+            </div>
+
+            <h2 class="doc-h2" id="install">第一步：安装 OpenCode</h2>
+            <div class="doc-code">npm install -g opencode-ai</div>
+            <h3 class="doc-h3" id="verify">验证安装</h3>
+            <div class="doc-code">opencode --version</div>
+
+            <h2 class="doc-h2" id="config">第二步：创建配置文件</h2>
+            <p class="doc-p">在 home 目录创建配置文件 <code style="background:var(--bg-code);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:13px">~/.opencode/config.json</code>：</p>
+            <div class="doc-code">{
+  "providers": {
+    "anthropic": {
+      "apiKey": "YOUR_API_KEY",
+      "baseURL": "https://forestapi.com"
+    },
+    "openai": {
+      "apiKey": "YOUR_API_KEY",
+      "baseURL": "https://forestapi.com/v1"
+    }
+  },
+  "defaultModel": "claude-sonnet-4-5"
+}</div>
+            <p class="doc-p">请将 <strong>YOUR_API_KEY</strong> 替换为在 <a href="/token">控制台</a> 页面中复制的 API Key。</p>
+
+            <h2 class="doc-h2" id="models">支持的模型</h2>
+            <p class="doc-p">通过 Forest API，OpenCode 可以使用以下模型：</p>
+            <div class="doc-code">claude-opus-4-5
+claude-sonnet-4-5
+claude-haiku-4-5
+gpt-4o
+gpt-4o-mini
+gemini-2.0-flash</div>
+
+            <h2 class="doc-h2" id="start">第三步：开始使用</h2>
+            <p class="doc-p">在项目目录中运行：</p>
+            <div class="doc-code">opencode</div>
+
+            <div class="doc-next">
+                <div class="doc-next-title">下一步</div>
+                <div class="doc-next-links">
+                    <a href="/docs/cherry-studio" class="doc-next-link">→ Cherry Studio 配置教程</a>
+                </div>
+            </div>
+        </main>
+
+        <aside class="doc-toc">
+            <div class="doc-toc-title">ON THIS PAGE</div>
+            <a href="#install" class="doc-toc-link">第一步：安装 OpenCode</a>
+            <a href="#verify" class="doc-toc-link">验证安装</a>
+            <a href="#config" class="doc-toc-link">第二步：创建配置文件</a>
+            <a href="#models" class="doc-toc-link">支持的模型</a>
+            <a href="#start" class="doc-toc-link">第三步：开始使用</a>
+        </aside>
+    </div>
+</body>
+</html>

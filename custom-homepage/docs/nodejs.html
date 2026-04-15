@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js 环境安装教程 - Forest API</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="/" class="navbar-brand">Forest API</a>
+            <div class="navbar-links">
+                <a href="/">首页</a>
+                <a href="/pricing">定价</a>
+                <a href="/docs" class="active">使用教程</a>
+                <a href="/about">关于我们</a>
+            </div>
+            <div class="navbar-actions">
+                <a href="/login" class="btn-nav-login">登录</a>
+                <a href="/register" class="btn-nav-register">注册</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="doc-layout">
+        <!-- 左侧导航 -->
+        <aside class="docs-sidebar">
+            <nav class="docs-nav">
+                <a href="/docs" class="docs-nav-home">首页</a>
+                <div class="docs-nav-group">
+                    <div class="docs-nav-group-title">快速开始</div>
+                    <a href="/docs/nodejs" class="docs-nav-link" style="color:var(--accent);border-left-color:var(--accent)">Node.js 环境安装教程</a>
+                    <a href="/docs/claude-code" class="docs-nav-link">Claude Code 配置教程</a>
+                    <a href="/docs/gemini-cli" class="docs-nav-link">Gemini CLI 配置教程</a>
+                    <a href="/docs/codex" class="docs-nav-link">Codex (OpenAI) 配置教程</a>
+                </div>
+                <div class="docs-nav-group">
+                    <div class="docs-nav-group-title">进阶玩法</div>
+                    <a href="/docs/openclaw" class="docs-nav-link">OpenClaw 部署教程</a>
+                    <a href="/docs/opencode" class="docs-nav-link">OpenCode 配置教程</a>
+                    <a href="/docs/cherry-studio" class="docs-nav-link">Cherry Studio 配置教程</a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- 主内容 -->
+        <main class="doc-main">
+            <div class="doc-breadcrumb">
+                <a href="/docs">Docs</a>
+                <span>›</span>
+                <span>快速开始</span>
+            </div>
+
+            <h1 class="doc-title">Node.js 环境安装教程</h1>
+            <p class="doc-lead">在 Windows、macOS、Linux 安装 Node.js LTS，并验证 node/npm 命令可用。</p>
+            <div class="doc-note">后续的 Claude Code、Gemini CLI、Codex 都依赖 Node.js 运行环境。先完成本教程，再继续各自工具配置。</div>
+
+            <h2 class="doc-h2" id="windows">Windows</h2>
+
+            <h3 class="doc-h3">方法一：官方下载（推荐）</h3>
+            <p class="doc-p">前往 <a href="https://nodejs.org/" target="_blank">Node.js 官网</a> 下载 LTS 版本，双击安装包按提示安装即可。</p>
+
+            <h3 class="doc-h3">方法二：使用 Chocolatey</h3>
+            <div class="doc-code">choco install nodejs-lts</div>
+
+            <h3 class="doc-h3">方法三：使用 Scoop</h3>
+            <div class="doc-code">scoop install nodejs-lts</div>
+
+            <h2 class="doc-h2" id="macos">macOS</h2>
+
+            <h3 class="doc-h3">方法一：使用 Homebrew（推荐）</h3>
+            <div class="doc-code">brew install node</div>
+
+            <h3 class="doc-h3">方法二：官方下载</h3>
+            <p class="doc-p">前往 <a href="https://nodejs.org/" target="_blank">Node.js 官网</a> 下载 macOS 安装包。</p>
+
+            <h2 class="doc-h2" id="linux">Linux</h2>
+
+            <h3 class="doc-h3">Ubuntu / Debian：</h3>
+            <div class="doc-code">curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs</div>
+
+            <h3 class="doc-h3">CentOS / RHEL：</h3>
+            <div class="doc-code">curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -
+sudo yum install -y nodejs</div>
+
+            <h2 class="doc-h2" id="verify">验证安装</h2>
+            <p class="doc-p">安装完成后，在终端执行：</p>
+            <div class="doc-code">node --version
+npm --version</div>
+            <p class="doc-p">如果能输出版本号，说明 Node.js 与 npm 已可用。</p>
+
+            <div class="doc-next">
+                <div class="doc-next-title">下一步</div>
+                <div class="doc-next-links">
+                    <a href="/docs/claude-code" class="doc-next-link">→ Claude Code 配置教程</a>
+                    <a href="/docs/gemini-cli" class="doc-next-link">→ Gemini CLI 配置教程</a>
+                    <a href="/docs/codex" class="doc-next-link">→ Codex (OpenAI) 配置教程</a>
+                </div>
+            </div>
+        </main>
+
+        <!-- 右侧目录 -->
+        <aside class="doc-toc">
+            <div class="doc-toc-title">ON THIS PAGE</div>
+            <a href="#windows" class="doc-toc-link">Windows</a>
+            <a href="#macos" class="doc-toc-link">macOS</a>
+            <a href="#linux" class="doc-toc-link">Linux</a>
+            <a href="#verify" class="doc-toc-link">验证安装</a>
+        </aside>
+    </div>
+</body>
+</html>
