@@ -45,17 +45,15 @@ services:
       timeout: 10s
       retries: 3
 
-  nginx:
-    image: nginx:alpine
-    container_name: nginx-proxy
+  # 前端（自建镜像，替换了默认首页）
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: new-api-web
     restart: always
     ports:
       - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./custom-homepage:/usr/share/nginx/html/custom:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - new-api
     networks:
