@@ -50,9 +50,18 @@ nginx:
 | 文件 | 用途 | nginx 路由 |
 |------|------|-----------|
 | index.html | 自定义首页（含导航栏、公告弹窗） | `location = /` |
-| pricing.html | 自定义定价页（按量充值 + 周期订阅两个 tab） | `location = /pricing` |
-| style.css | 两个页面共用的样式表 | `location = /style.css` |
-| override.css | 暖色主题覆盖（注入到 React 管理面板页面） | `location = /custom-theme.css` |
+| pricing.html | 自定义定价页（按量充值 + 周期订阅） | `location = /pricing` |
+| about.html | 关于我们页面 | `location = /about` |
+| docs.html | 使用教程首页 | `location = /docs` |
+| docs/nodejs.html | Node.js 安装教程 | `location ~ ^/docs/(.+)$` |
+| docs/claude-code.html | Claude Code 配置教程 | 同上 |
+| docs/gemini-cli.html | Gemini CLI 配置教程 | 同上 |
+| docs/codex.html | Codex (OpenAI) 配置教程 | 同上 |
+| docs/openclaw.html | OpenClaw 部署教程 | 同上 |
+| docs/opencode.html | OpenCode 配置教程 | 同上 |
+| docs/cherry-studio.html | Cherry Studio 配置教程 | 同上 |
+| style.css | 所有自定义页面共用样式表 | `location = /style.css` |
+| override.css | 暖色主题覆盖（注入到 React 管理面板） | `location = /custom-theme.css` |
 
 ### 新增自定义页面的步骤
 
@@ -72,7 +81,7 @@ nginx:
 
 ```nginx
 sub_filter '</head>' '<link rel="stylesheet" href="/custom-theme.css"></head>';  # 注入暖色主题 CSS
-sub_filter '</body>' '<script>...首页跳转修复...</script></body>';               # 拦截 SPA 的 / 链接
+sub_filter '</body>' '<script>/* MutationObserver 动态替换链接 */</script></body>';  # 替换 /token→/console、docs.newapi.pro→/docs、修复首页跳转
 sub_filter '<title>New API</title>' '<title>Forest API</title>';                 # 替换页面标题
 sub_filter '"New API"' '"Forest API"';                                           # 替换品牌名
 sub_filter_once off;
