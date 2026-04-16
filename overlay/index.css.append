@@ -470,17 +470,6 @@ body[theme-mode="dark"] .semi-card {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* ==================== 品牌名替换：New API → Forest API ==================== */
-/* 只匹配 logo 旁的系统名（Semi UI Typography.Title heading=4 渲染为 h4） */
-header a[href="/"] h4 {
-  font-size: 0 !important;
-}
-header a[href="/"] h4::after {
-  content: "Forest API";
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
 /* ==================== 侧边栏选中项暖色 ==================== */
 .sidebar-nav-item:hover {
   background-color: rgba(196, 149, 106, 0.08) !important;
