@@ -31,6 +31,10 @@ RUN cat /tmp/index.css.append >> ./src/index.css
 # Build
 RUN DISABLE_ESLINT_PLUGIN='true' bun run build
 
+# Brand substitution: replace "New API" → "Forest API" in built assets
+RUN find /build/dist -type f \( -name "*.js" -o -name "*.html" \) \
+    -exec sed -i 's/New API/Forest API/g' {} +
+
 # --- Production stage ---
 FROM nginx:alpine
 

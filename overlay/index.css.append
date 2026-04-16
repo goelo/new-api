@@ -333,3 +333,168 @@ body:not([theme-mode="dark"]) .flash-bg-glow {
   }
 }
 
+/*
+ * 暖色主题覆盖 — 通过 nginx 注入到官方 new-api 前端
+ * 将 Semi Design 默认蓝色主色替换为与自定义首页一致的暖棕色 #c4956a
+ */
+
+/* ==================== Semi Design 主色覆盖 ==================== */
+body {
+  --semi-color-primary: #c4956a !important;
+  --semi-color-primary-hover: #b8855a !important;
+  --semi-color-primary-active: #a8754a !important;
+  --semi-color-primary-disabled: #d4b598 !important;
+  --semi-color-primary-light-default: rgba(196, 149, 106, 0.08) !important;
+  --semi-color-primary-light-hover: rgba(196, 149, 106, 0.15) !important;
+  --semi-color-primary-light-active: rgba(196, 149, 106, 0.22) !important;
+  --semi-color-link: #c4956a !important;
+  --semi-color-link-hover: #b8855a !important;
+  --semi-color-link-active: #a8754a !important;
+  --semi-color-link-visited: #a8754a !important;
+  --semi-color-focus-border: rgba(196, 149, 106, 0.6) !important;
+}
+
+/* 暗色模式 */
+body[theme-mode="dark"] {
+  --semi-color-primary: #d4a87a !important;
+  --semi-color-primary-hover: #c89868 !important;
+  --semi-color-primary-active: #bc8858 !important;
+  --semi-color-primary-disabled: #8a7560 !important;
+  --semi-color-primary-light-default: rgba(212, 168, 122, 0.12) !important;
+  --semi-color-primary-light-hover: rgba(212, 168, 122, 0.2) !important;
+  --semi-color-primary-light-active: rgba(212, 168, 122, 0.28) !important;
+  --semi-color-link: #d4a87a !important;
+  --semi-color-link-hover: #c89868 !important;
+  --semi-color-link-active: #bc8858 !important;
+  --semi-color-link-visited: #bc8858 !important;
+  --semi-color-focus-border: rgba(212, 168, 122, 0.5) !important;
+}
+
+/* ==================== 登录/注册页面背景 ==================== */
+/* 把冷灰背景改为暖米白 */
+.bg-gray-100 {
+  background-color: #faf8f5 !important;
+}
+
+/* ==================== 模糊晕染球颜色 ==================== */
+.blur-ball-indigo {
+  background: #c4956a !important;
+}
+
+.blur-ball-teal {
+  background: #d4a87a !important;
+}
+
+/* ==================== 蓝色链接改为暖棕色 ==================== */
+.text-blue-600 {
+  color: #c4956a !important;
+}
+
+a.text-blue-600:hover,
+.hover\:text-blue-800:hover {
+  color: #a8754a !important;
+}
+
+/* ==================== Header 统一暖色风格 ==================== */
+/* 让所有页面的 header 都使用暖色背景，不只是首页 */
+header.sticky {
+  background: rgba(250, 248, 245, 0.85) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid #f0ece4;
+}
+
+body[theme-mode="dark"] header.sticky {
+  background: rgba(26, 26, 26, 0.85) !important;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+/* ==================== 登录/注册页面 — 完整暖色风格 ==================== */
+
+/* 邮箱登录按钮：冷黑 → 暖棕 */
+.bg-black {
+  background-color: #c4956a !important;
+}
+.hover\:bg-gray-800:hover {
+  background-color: #b8855a !important;
+}
+
+/* OAuth 按钮边框/悬停 → 暖色调 */
+.border-gray-200 {
+  border-color: #e8ddd0 !important;
+}
+.hover\:bg-gray-50:hover {
+  background-color: rgba(196, 149, 106, 0.06) !important;
+}
+
+/* 标题文字 → 暖灰 */
+.\!text-gray-800,
+.text-gray-800 {
+  color: #5a4a3a !important;
+}
+html[class*="dark"] .\!text-gray-800,
+body[theme-mode="dark"] .\!text-gray-800,
+body[theme-mode="dark"] .text-gray-800 {
+  color: #e0d6cc !important;
+}
+
+/* 协议文字 → 暖灰 */
+.text-gray-600 {
+  color: #8a7a6a !important;
+}
+
+/* 分割线 → 暖色调 */
+.bg-gray-100 .semi-divider {
+  border-color: #e8ddd0;
+}
+
+/* 2FA 成功图标 → 暖色 */
+.bg-green-100 {
+  background-color: rgba(196, 149, 106, 0.15) !important;
+}
+.text-green-600 {
+  color: #c4956a !important;
+}
+body[theme-mode="dark"] .bg-green-900 {
+  background-color: rgba(196, 149, 106, 0.2) !important;
+}
+body[theme-mode="dark"] .text-green-400 {
+  color: #d4a87a !important;
+}
+
+/* Card 卡片 → 暖白底色 + 柔和阴影 */
+.bg-gray-100 .semi-card {
+  background: #fffdf9 !important;
+  box-shadow: 0 4px 24px rgba(180, 140, 100, 0.08) !important;
+}
+body[theme-mode="dark"] .semi-card {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ==================== 品牌名替换：New API → Forest API ==================== */
+/* 只匹配 logo 旁的系统名（Semi UI Typography.Title heading=4 渲染为 h4） */
+header a[href="/"] h4 {
+  font-size: 0 !important;
+}
+header a[href="/"] h4::after {
+  content: "Forest API";
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* ==================== 侧边栏选中项暖色 ==================== */
+.sidebar-nav-item:hover {
+  background-color: rgba(196, 149, 106, 0.08) !important;
+  color: #c4956a !important;
+}
+
+.sidebar-nav-item-selected {
+  background-color: rgba(196, 149, 106, 0.12) !important;
+  color: #c4956a !important;
+}
+
+/* ==================== 注册页面额外覆盖 ==================== */
+/* 注册页同样使用暖色背景 */
+.bg-gray-100 .blur-ball-indigo,
+.bg-gray-100 .blur-ball-teal {
+  opacity: 0.3;
+}
