@@ -1,161 +1,326 @@
-# Forest API 部署指南
+# Forest API 部署文档
+
+基于 [New API](https://github.com/QuantumNous/new-api) 的 Overlay 定制部署方案。
+
+**核心思路**：后端直接使用官方镜像，前端从上游源码构建并覆盖自定义组件，通过 Nginx 实现品牌定制和静态页面路由。上游更新时零冲突。
 
 ## 架构概览
 
 ```
-用户浏览器
-    │
-    ▼
-nginx-proxy (容器, 80/443)
-    │
-    ├── location = /            → 自定义静态首页 (index.html)
-    ├── location = /pricing     → 自定义静态定价页 (pricing.html)
-    ├── location = /style.css   → 自定义页面的 CSS
-    ├── location /v1/           → API relay (直通, 不做 sub_filter)
-    ├── location /assets/       → React 静态资源 (直通, 不做 sub_filter)
-    └── location /              → new-api 管理面板 (代理 + sub_filter 品牌替换)
-            │
-            ▼
-      new-api (容器, 3000) ── Go 后端 + React 前端 SPA
-            │
-            ├── redis (容器)
-            └── postgres (容器)
+                     ┌─────────────────────────────┐
+                     │   Nginx (nginx/nginx.conf)   │
+                     │   TLS · 品牌替换 · 静态页路由  │
+                     │   Port 443                    │
+                     └──────────┬──────────┬────────┘
+                                │          │
+               location = /     │          │  location /
+               /pricing /docs   │          │  /v1/ /assets/ /api
+                                │          │
+                    ┌───────────▼──┐  ┌────▼──────────┐
+                    │ custom-      │  │   new-api      │
+                    │ homepage/    │  │   (官方镜像)    │
+                    │ 静态 HTML    │  │   Port 3000    │
+                    └──────────────┘  └───────┬────────┘
+                                              │
+                    ┌─────────────────────────┐│
+                    │   web (Dockerfile.web)   ││
+                    │   上游前端 + overlay 定制 ││
+                    │   Port 80               ││
+                    └─────────────────────────┘│
+                                              │
+                              ┌────────┐  ┌───▼──────┐
+                              │ Redis  │  │ Postgres │
+                              └────────┘  └──────────┘
 ```
 
-## 服务组成 (docker-compose.yml)
+## 目录结构
 
-| 服务 | 镜像 | 容器名 | 端口 | 说明 |
-|------|------|--------|------|------|
-| new-api | calciumion/new-api:latest | new-api | 3000 | Go 后端 + React 前端 |
-| nginx | nginx:alpine | nginx-proxy | 80, 443 | 反向代理 + 自定义页面 + 品牌替换 |
-| redis | redis:latest | redis | - | 缓存 |
-| postgres | postgres:15 | postgres | - | 数据库 |
-
-## 关键 Volume 挂载
-
-```yaml
-nginx:
-  volumes:
-    - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro   # nginx 配置
-    - ./custom-homepage:/usr/share/nginx/html/custom:ro       # 自定义静态页面
-    - /etc/letsencrypt:/etc/letsencrypt:ro                    # TLS 证书
+```
+forest-api/
+├── docker-compose.yml      # 服务编排
+├── Dockerfile.web          # 前端 overlay 构建
+├── sync.sh                 # 拉取/更新上游源码
+├── nginx/
+│   └── nginx.conf          # 外层 Nginx（TLS + sub_filter 品牌替换）
+├── custom-homepage/        # 静态页面（首页、定价、文档、关于）
+│   ├── index.html
+│   ├── pricing.html
+│   ├── about.html
+│   ├── docs.html
+│   ├── docs/               # 文档子页面
+│   ├── style.css
+│   └── override.css        # 暖色主题 CSS（通过 sub_filter 注入）
+├── overlay/                # 前端定制层
+│   ├── pages/Home/         # 自定义首页组件（整文件替换）
+│   │   ├── index.jsx
+│   │   └── style.css
+│   ├── components/layout/  # 定制的布局组件
+│   │   ├── Footer.jsx
+│   │   └── headerbar/
+│   │       ├── index.jsx
+│   │       └── HeaderLogo.jsx
+│   ├── index.css.append    # 追加到上游 index.css 末尾的 CSS
+│   └── web-nginx.conf      # 前端容器内 Nginx 配置
+├── data/                   # 运行时数据（gitignore）
+├── logs/                   # 运行时日志（gitignore）
+└── upstream/               # 上游源码（sync.sh 拉取，gitignore）
 ```
 
-**全部是 `:ro` 只读挂载**，宿主机文件改了容器能直接读到（HTML/CSS 立即生效），但不能 `docker cp` 往容器里写。
+## 前置条件
 
-## 自定义静态页面
+- VPS（推荐 2C4G 以上）
+- Docker 和 Docker Compose
+- 域名已解析到服务器 IP（文档以 `forestapi.com` 为例）
+- Git
 
-目录 `custom-homepage/` 中的文件：
+## 首次部署
 
-| 文件 | 用途 | nginx 路由 |
-|------|------|-----------|
-| index.html | 自定义首页（含导航栏、公告弹窗） | `location = /` |
-| pricing.html | 自定义定价页（按量充值 + 周期订阅） | `location = /pricing` |
-| about.html | 关于我们页面 | `location = /about` |
-| docs.html | 使用教程首页 | `location = /docs` |
-| docs/nodejs.html | Node.js 安装教程 | `location ~ ^/docs/(.+)$` |
-| docs/claude-code.html | Claude Code 配置教程 | 同上 |
-| docs/gemini-cli.html | Gemini CLI 配置教程 | 同上 |
-| docs/codex.html | Codex (OpenAI) 配置教程 | 同上 |
-| docs/openclaw.html | OpenClaw 部署教程 | 同上 |
-| docs/opencode.html | OpenCode 配置教程 | 同上 |
-| docs/cherry-studio.html | Cherry Studio 配置教程 | 同上 |
-| style.css | 所有自定义页面共用样式表 | `location = /style.css` |
-| override.css | 暖色主题覆盖（注入到 React 管理面板） | `location = /custom-theme.css` |
+### 1. 克隆仓库
 
-### 新增自定义页面的步骤
+```bash
+git clone git@github.com:goelo/new-api.git forest-api
+cd forest-api
+```
 
-1. 在 `custom-homepage/` 下创建 `xxx.html`，引用 `style.css?v=版本号`
-2. 在 `nginx/nginx.conf` 中添加：
-   ```nginx
-   location = /xxx {
-       root /usr/share/nginx/html/custom;
-       try_files /xxx.html =404;
-   }
-   ```
-3. **重启 nginx 容器**（不是 reload，见下方说明）
+### 2. 拉取上游源码
 
-## nginx sub_filter 品牌替换机制
+```bash
+./sync.sh
+```
 
-在 `location /`（代理到 new-api 的通用 location）中，通过 `sub_filter` 实现品牌替换，**无需改源码**：
+这会把 [QuantumNous/new-api](https://github.com/QuantumNous/new-api) 的最新代码 clone 到 `upstream/` 目录。
+
+### 3. 配置域名和证书
+
+#### 3a. 申请 TLS 证书
+
+```bash
+# 安装 certbot（如果没有）
+apt install -y certbot
+
+# 申请证书（先确保 80 端口没被占用）
+certbot certonly --standalone -d forestapi.com
+```
+
+证书会存放在 `/etc/letsencrypt/live/forestapi.com/`。
+
+#### 3b. 修改 Nginx 配置
+
+编辑 `nginx/nginx.conf`，确认以下内容跟你的域名一致：
 
 ```nginx
-sub_filter '</head>' '<link rel="stylesheet" href="/custom-theme.css"></head>';  # 注入暖色主题 CSS
-sub_filter '</body>' '<script>/* MutationObserver 动态替换链接 */</script></body>';  # 替换 /token→/console、docs.newapi.pro→/docs、修复首页跳转
-sub_filter '<title>New API</title>' '<title>Forest API</title>';                 # 替换页面标题
-sub_filter '"New API"' '"Forest API"';                                           # 替换品牌名
-sub_filter_once off;
-sub_filter_types text/html;  # 只替换 HTML，不要加 application/json！
+server_name forestapi.com;
+ssl_certificate /etc/letsencrypt/live/forestapi.com/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/forestapi.com/privkey.pem;
 ```
 
-**注意事项：**
-- `sub_filter_types` **绝对不能**加 `application/json`，否则会破坏 API 接口的 JSON 响应（如 `/api/notice` 公告接口），导致前端功能异常
-- `sub_filter` 要求 upstream 返回未压缩内容，所以设了 `proxy_set_header Accept-Encoding ""`
-- `/v1/` 和 `/assets/` 有独立的 location 块，不经过 sub_filter，保证 API 流式响应和静态资源加载正常
+如果需要修改品牌名称，搜索 `Forest API` 和 `New API` 进行替换。
 
-## 部署操作
+### 4. 修改密码
 
-### 日常更新（改 HTML/CSS 内容）
+编辑 `docker-compose.yml`，**务必修改以下默认密码**：
 
-HTML 和 CSS 文件改了直接生效（volume 挂载），但浏览器可能有缓存。建议：
-- 给 CSS 引用加版本号：`style.css?v=3`（每次改完递增）
-- 或让用户 Ctrl+Shift+R 强刷
+```yaml
+# PostgreSQL 密码
+POSTGRES_PASSWORD: <your-strong-password>
 
-```bash
-# 通常不需要任何 docker 命令，改文件就行
-# 如果想确保 nginx 重新读取，可以 reload：
-docker exec nginx-proxy nginx -s reload
+# 对应的 DSN
+SQL_DSN: postgresql://root:<your-strong-password>@postgres:5432/new-api
+
+# Session 密钥
+SESSION_SECRET: <your-random-secret>
 ```
 
-### 改 nginx.conf（加路由、改配置）
+### 5. 安装宿主机 Nginx
 
-nginx.conf 是 `:ro` 挂载，宿主机改完后**必须重启容器**，`nginx -s reload` 不一定能读到新文件：
+外层 Nginx 运行在宿主机上（非容器），负责 TLS 和品牌替换。
 
 ```bash
-docker restart nginx-proxy
+apt install -y nginx
+
+# 复制配置
+cp nginx/nginx.conf /etc/nginx/sites-available/forestapi.conf
+ln -sf /etc/nginx/sites-available/forestapi.conf /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
+
+# 复制静态页面
+mkdir -p /usr/share/nginx/html/custom
+cp -r custom-homepage/* /usr/share/nginx/html/custom/
+
+# 检查配置 & 启动
+nginx -t
+systemctl restart nginx
 ```
 
-验证配置是否生效：
-```bash
-docker exec nginx-proxy cat /etc/nginx/conf.d/default.conf | grep -n "你加的关键词"
-```
-
-### 更新 new-api 后端
+### 6. 构建 & 启动
 
 ```bash
-docker compose pull new-api
-docker compose up -d new-api
-```
-
-### 完整重启所有服务
-
-```bash
-cd /root/git/new-api
-docker compose down
+docker compose build
 docker compose up -d
 ```
 
-### 拉取代码后部署
+### 7. 验证
 
 ```bash
-git pull
-docker restart nginx-proxy   # 如果改了 nginx.conf 或自定义页面
+# 检查容器状态
+docker compose ps
+
+# 检查后端健康
+curl -s http://localhost:3000/api/status
+
+# 检查前端
+curl -s http://localhost:80 | head -5
+
+# 检查外层 Nginx（HTTPS）
+curl -s https://forestapi.com/ | head -5
 ```
 
-## 公告系统
+首次启动后访问 `https://forestapi.com/` 即可看到自定义首页。
 
-自定义首页（index.html）底部有一段 JS，会调用 `/api/notice` 接口获取公告内容并弹窗显示：
+## 日常更新上游
 
-- 公告内容在 new-api 管理后台设置
-- 用户点"今日不再显示"后写入 `localStorage`（key: `notice_close_date`），当天不再弹出
-- 与 React 管理面板中的公告共享同一个 localStorage key，行为一致
+当上游 new-api 发布新版本时：
 
-## 踩坑记录
+```bash
+cd forest-api
 
-| 问题 | 原因 | 解决 |
-|------|------|------|
-| 公告不显示 | `sub_filter_types` 包含了 `application/json`，破坏了 `/api/notice` 的 JSON 响应 | 只保留 `text/html` |
-| 改了 nginx.conf 不生效 | `nginx -s reload` 不重新挂载 volume | 用 `docker restart nginx-proxy` |
-| CSS 不更新 | style.css 设了 24h 浏览器缓存 | HTML 中引用加 `?v=版本号` |
-| /pricing 跳到 React 应用 | 没有为自定义页面配置 nginx 精确匹配 location | 添加 `location = /pricing` 指向 pricing.html |
-| React 管理面板内点"首页"不回自定义首页 | SPA 路由拦截了 `/`，不触发真正的页面跳转 | sub_filter 注入 JS 脚本拦截 `<a href="/">` 的点击，改用 `window.location.href` |
+# 1. 拉取最新上游代码
+./sync.sh
+
+# 2. 更新后端（拉取最新官方镜像）
+docker compose pull new-api
+
+# 3. 重新构建前端（上游源码 + overlay）
+docker compose build web
+
+# 4. 重启服务
+docker compose up -d
+```
+
+**整个过程不会有任何冲突**，因为你的定制文件在 `overlay/` 目录，跟上游代码完全隔离。
+
+### 指定版本更新
+
+```bash
+# 拉取指定 tag
+./sync.sh v3.8.0
+
+# 后端也指定版本（编辑 docker-compose.yml）
+# image: calciumion/new-api:v3.8.0
+
+docker compose build web
+docker compose up -d
+```
+
+## 更新静态页面
+
+修改 `custom-homepage/` 下的文件后：
+
+```bash
+cp -r custom-homepage/* /usr/share/nginx/html/custom/
+nginx -s reload
+```
+
+## 定制文件维护
+
+### overlay 里有哪些文件？
+
+| 文件 | 作用 | 何时需要同步 |
+|------|------|-------------|
+| `overlay/pages/Home/index.jsx` | 自定义首页（Bento Grid 布局） | **永远不需要** — 跟上游无关 |
+| `overlay/pages/Home/style.css` | 首页样式 | **永远不需要** — 纯新增 |
+| `overlay/index.css.append` | 暖色主题 CSS 变量 + Flash 样式 | **永远不需要** — 追加到末尾 |
+| `overlay/components/layout/Footer.jsx` | 含 flashFooter 的 Footer | 上游改了 Footer 时 |
+| `overlay/components/layout/headerbar/index.jsx` | flash-header class | 上游改了 headerbar 时 |
+| `overlay/components/layout/headerbar/HeaderLogo.jsx` | 闪电 SVG logo | 上游改了 HeaderLogo 时 |
+| `overlay/web-nginx.conf` | 前端容器 Nginx 配置 | **极少需要改** |
+
+### 如何检查上游是否改了需要同步的文件？
+
+```bash
+cd upstream
+git log --oneline --since="2 weeks ago" -- \
+  web/src/components/layout/Footer.jsx \
+  web/src/components/layout/headerbar/index.jsx \
+  web/src/components/layout/headerbar/HeaderLogo.jsx
+```
+
+如果有输出，说明上游改了这些文件，需要手动对比并更新 overlay 里对应的文件：
+
+```bash
+# 查看上游改了什么
+diff overlay/components/layout/Footer.jsx upstream/web/src/components/layout/Footer.jsx
+
+# 合并改动后更新 overlay
+cp upstream/web/src/components/layout/Footer.jsx overlay/components/layout/Footer.jsx
+# 然后手动加回 flashFooter 相关代码
+```
+
+## 构建原理
+
+`Dockerfile.web` 的构建流程：
+
+```
+upstream/web/ 源码
+       │
+       ▼
+  bun install（使用上游的 package.json）
+       │
+       ▼
+  overlay 覆盖：
+    - pages/Home/ → 整目录替换
+    - Footer.jsx, HeaderLogo.jsx, headerbar/index.jsx → 整文件替换
+    - index.css.append → cat >> 追加到 index.css 末尾
+       │
+       ▼
+  bun run build → dist/
+       │
+       ▼
+  nginx:alpine 容器（web-nginx.conf）
+```
+
+## 故障排查
+
+### 前端构建失败
+
+```bash
+# 查看构建日志
+docker compose build web --no-cache 2>&1 | tail -50
+
+# 常见原因：上游改了依赖但 overlay 文件用了旧 API
+# 解决：更新 overlay 文件
+```
+
+### 后端无法连接数据库
+
+```bash
+docker compose logs new-api | grep -i error
+docker compose logs postgres
+
+# 确认密码一致
+grep SQL_DSN docker-compose.yml
+grep POSTGRES_PASSWORD docker-compose.yml
+```
+
+### Nginx 502 Bad Gateway
+
+```bash
+# 检查后端是否在运行
+docker compose ps new-api
+
+# 检查容器网络
+docker compose exec web ping new-api
+```
+
+### 证书续签
+
+```bash
+certbot renew
+nginx -s reload
+```
+
+建议配置 cron 自动续签：
+
+```bash
+echo "0 3 * * * certbot renew --quiet && nginx -s reload" | crontab -
+```

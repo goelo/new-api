@@ -1,0 +1,41 @@
+# Frontend build with overlay customization
+# Usage: docker compose build web
+#
+# Flow:
+#   1. Clone upstream new-api frontend source
+#   2. Overlay custom files (Home page, Footer, HeaderLogo, CSS theme)
+#   3. bun install & build
+#   4. Serve via nginx
+
+FROM oven/bun:1 AS builder
+
+WORKDIR /build
+
+# Copy upstream frontend source (populated by sync.sh)
+COPY upstream/web/package.json upstream/web/bun.lock ./
+RUN bun install
+COPY upstream/web/ .
+
+# Overlay: replace Home page (whole directory)
+COPY overlay/pages/Home/ ./src/pages/Home/
+
+# Overlay: replace layout components (whole file)
+COPY overlay/components/layout/Footer.jsx ./src/components/layout/Footer.jsx
+COPY overlay/components/layout/headerbar/index.jsx ./src/components/layout/headerbar/index.jsx
+COPY overlay/components/layout/headerbar/HeaderLogo.jsx ./src/components/layout/headerbar/HeaderLogo.jsx
+
+# Overlay: append custom CSS (warm theme + Flash styles)
+COPY overlay/index.css.append /tmp/index.css.append
+RUN cat /tmp/index.css.append >> ./src/index.css
+
+# Build
+RUN DISABLE_ESLINT_PLUGIN='true' bun run build
+
+# --- Production stage ---
+FROM nginx:alpine
+
+COPY --from=builder /build/dist /usr/share/nginx/html
+COPY overlay/web-nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
