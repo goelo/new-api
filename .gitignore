@@ -15,6 +15,9 @@ logs/
 # Upstream source (cloned by sync.sh, not tracked)
 upstream/
 
+# Frontend build output (not tracked)
+web/
+
 # Misc
 .env
 plans
