@@ -3,15 +3,17 @@
 ## 架构说明
 
 ```
-用户请求 (port 80)
-    └── nginx-proxy
-            ├── GET /          → custom-homepage/index.html (自定义静态首页)
-            ├── /custom-assets → custom-homepage/assets/
-            └── 其他所有请求   → new-api:3000 (官方后端镜像，含控制台/API)
+用户请求 (80/443)
+    └── new-api-web (nginx, Docker)
+            ├── GET /          → 自定义静态首页
+            ├── /v1/*          → new-api:3000 (流式 API，无 sub_filter)
+            ├── /assets/*      → new-api:3000 (静态资源)
+            └── 其他所有请求   → new-api:3000 (含 sub_filter 品牌替换)
 ```
 
 - **new-api**：使用 `calciumion/new-api:latest` 官方镜像，无需本地编译
-- **nginx**：仅拦截根路径 `/`，替换为自定义首页；其余全部反代到后端
+- **new-api-web**：上游前端源码 + overlay 定制，构建为 nginx 镜像
+- **nginx 配置**：`overlay/web-nginx.conf`（打包进镜像，修改后需重新 build）
 - **postgres**：持久化数据库，数据存在 `pg_data` named volume 中
 - **redis**：缓存，无持久化需求
 
@@ -19,106 +21,113 @@
 
 ## 前置条件
 
-VPS 上需要安装：
-
 ```bash
 # Docker
 curl -fsSL https://get.docker.com | sh
 
-# Docker Compose plugin（新版 Docker 已内置）
-docker compose version  # 验证，v2 输出 "Docker Compose version v2.x.x"
+# 验证 docker-compose
+docker-compose version
 ```
 
 ---
 
-## 部署步骤
+## 首次部署
 
 ### 1. 拉取代码
 
 ```bash
-git clone <your-repo-url> /opt/new-api
-cd /opt/new-api
+git clone <your-repo-url> /root/git/new-api
+cd /root/git/new-api
 ```
 
-### 2. 修改生产环境密码
+### 2. 拉取上游前端源码
+
+```bash
+./sync.sh
+```
+
+### 3. 修改生产环境密码
 
 编辑 `docker-compose.yml`，替换以下默认值（**必须修改**）：
 
-| 配置项 | 位置 | 说明 |
-|--------|------|------|
-| `SESSION_SECRET` | new-api environment | JWT 签名密钥，随机字符串 |
-| `POSTGRES_PASSWORD` | postgres environment | 数据库密码 |
-| `SQL_DSN` 中的密码 | new-api environment | 与 POSTGRES_PASSWORD 保持一致 |
+| 配置项 | 说明 |
+|--------|------|
+| `SESSION_SECRET` | JWT 签名密钥，用 `openssl rand -hex 32` 生成 |
+| `POSTGRES_PASSWORD` | 数据库密码 |
+| `SQL_DSN` 中的密码 | 与 `POSTGRES_PASSWORD` 保持一致 |
+
+### 4. 配置 SSL 证书
 
 ```bash
-# 生成随机 SESSION_SECRET 示例
-openssl rand -hex 32
+# 安装 certbot
+apt install -y certbot
+
+# 申请证书（需要域名 DNS 已指向本机）
+certbot certonly --standalone -d your-domain.com
 ```
 
-### 3. 启动服务
+证书保存在 `/etc/letsencrypt/live/your-domain.com/`，已通过 volume 挂载进容器。
+
+修改 `overlay/web-nginx.conf` 中的域名（替换 `forestapi.com`）：
+
+```nginx
+server_name your-domain.com;
+ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+```
+
+### 5. 启动服务
 
 ```bash
-docker compose up -d
+docker-compose up -d
 
-# 查看启动状态
-docker compose ps
+# 查看状态
+docker-compose ps
 
 # 查看日志
-docker compose logs -f new-api
+docker-compose logs -f new-api
 ```
-
-### 4. 验证
-
-```bash
-# 后端健康检查
-curl http://localhost:3000/api/status
-
-# 首页（经 nginx）
-curl -I http://localhost:80/
-```
-
-浏览器访问 `http://<your-vps-ip>` 应看到自定义首页。
 
 ---
 
-## 配置域名 + HTTPS（可选）
+## 更新
 
-推荐用 Caddy 作为外层反代，自动申请 SSL 证书：
+### 更新后端（官方镜像）
 
 ```bash
-# 安装 Caddy
-apt install -y caddy
-
-# /etc/caddy/Caddyfile
-your-domain.com {
-    reverse_proxy localhost:80
-}
-
-systemctl reload caddy
+docker-compose pull new-api
+docker-compose up -d new-api
 ```
 
-或者修改 nginx 配置支持 HTTPS，参考 `nginx/nginx.conf`。
+不影响 nginx 配置和前端镜像。
+
+### 更新前端 / nginx 配置
+
+修改 `overlay/` 下的文件后：
+
+```bash
+docker-compose build web
+docker-compose up -d web
+```
+
+### 更新上游前端源码
+
+```bash
+./sync.sh
+docker-compose build web
+docker-compose up -d web
+```
 
 ---
 
-## 更新部署
+## SSL 证书续期
+
+Certbot 已自动配置续期任务。手动续期：
 
 ```bash
-cd /opt/new-api
-git pull
-
-# 更新官方镜像
-docker compose pull new-api
-
-# 重启（数据不丢失，pg_data volume 持久化）
-docker compose up -d
-```
-
-自定义首页改动（`custom-homepage/` 或 `nginx/nginx.conf`）只需：
-
-```bash
-git pull
-docker compose restart nginx
+docker stop new-api-web
+certbot renew
+docker-compose up -d web
 ```
 
 ---
@@ -126,38 +135,47 @@ docker compose restart nginx
 ## 目录结构
 
 ```
-/opt/new-api/
-├── docker-compose.yml      # 服务编排
+/root/git/new-api/
+├── docker-compose.yml      # 服务编排（443 端口、证书 volume 挂载）
+├── overlay/
+│   ├── web-nginx.conf      # nginx 配置（SSL + 反代 + 品牌替换）
+│   └── ...                 # 前端定制文件
 ├── nginx/
-│   └── nginx.conf          # nginx 反代配置
-├── custom-homepage/        # 自定义静态首页
-│   ├── index.html
-│   ├── style.css
-│   └── assets/
-├── data/                   # new-api 运行时数据（自动创建）
-└── logs/                   # 应用日志（自动创建）
+│   └── nginx.conf          # 与 overlay/web-nginx.conf 保持同步（参考用）
+├── upstream/               # 上游前端源码（由 sync.sh 填充）
+├── data/                   # new-api 运行时数据
+└── logs/                   # 应用日志
 ```
 
 ---
 
 ## 常见问题
 
-**Q: 首页没有更新？**
+**Q: 修改了 nginx 配置但没生效？**
+
+`overlay/web-nginx.conf` 打包在镜像里，需要重新 build：
 ```bash
-docker compose restart nginx
-# nginx 重启后立即生效，无需重建镜像
+docker-compose build web && docker-compose up -d web
+```
+
+**Q: HTTPS 打不开？**
+
+检查 443 端口是否监听：
+```bash
+ss -tlnp | grep 443
+```
+检查证书是否挂载进容器：
+```bash
+docker exec new-api-web ls /etc/letsencrypt/live/your-domain.com/
 ```
 
 **Q: 数据库连接失败？**
 ```bash
-# 检查 postgres 是否就绪
-docker compose logs postgres
-# new-api 有健康检查，postgres 未就绪时会自动重试
+docker-compose logs postgres
 ```
 
-**Q: 端口 80 被占用？**
+**Q: 查看实时日志？**
 ```bash
-# 查看占用进程
-lsof -i:80
-# 或修改 docker-compose.yml 中 nginx 的 ports: "8080:80"
+docker-compose logs -f new-api
+docker-compose logs -f new-api-web
 ```
