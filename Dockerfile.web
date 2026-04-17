@@ -21,6 +21,7 @@ COPY overlay/pages/Home/ ./src/pages/Home/
 
 # Overlay: replace layout components (whole file)
 COPY overlay/components/layout/Footer.jsx ./src/components/layout/Footer.jsx
+COPY overlay/components/layout/NoticeModal.jsx ./src/components/layout/NoticeModal.jsx
 COPY overlay/components/layout/headerbar/index.jsx ./src/components/layout/headerbar/index.jsx
 COPY overlay/components/layout/headerbar/HeaderLogo.jsx ./src/components/layout/headerbar/HeaderLogo.jsx
 
